@@ -1,0 +1,35 @@
+.dark-mode .content-wrapper{
+    background-color: #161B2C;
+}
+[class*=sidebar-dark-] {
+    background-color: #161B2C;
+}
+.dark-mode .navbar-white {
+    background-color: #161B2C;
+    color: #1f2d3d;
+}
+.navbar-light .navbar-nav .nav-link {
+    color: #dee2e6;
+}
+.card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #8D8D8D;
+    background-clip: border-box;
+    border: 0 solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    color: #ffff;
+}
+
+.btn-custom {
+    background-color: #00D68F;
+}
+.btn-novo {
+    background-color: #1f2d3d;
+    color: #ffff;
+}
