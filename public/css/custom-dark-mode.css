@@ -1,0 +1,80 @@
+.dark-mode .content-wrapper{
+    background-color: #161B2C;
+}
+[class*=sidebar-dark-] {
+    background-color: #161B2C;
+}
+.dark-mode .navbar-white {
+    background-color: #161B2C;
+    color: #1f2d3d;
+}
+.navbar-light .navbar-nav .nav-link {
+    color: #dee2e6;
+}
+.card {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #8D8D8D;
+    background-clip: border-box;
+    border: 0 solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    color: #ffff;
+}
+
+.btn-custom {
+    background-color: #00D68F;
+}
+.btn-novo {
+    background-color: #1f2d3d;
+    color: #ffff;
+}
+
+.custom-select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select {
+    width: 100%;
+    padding: 6px 40px 10px 10px;
+    font-size: 16px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+
+.custom-select option {
+    background-color: #333;
+    color: #fff;
+    padding: 5px;
+}
+
+.custom-select:focus {
+    outline: none;
+    border-color: #666;
+}
+
+.bustom-select {
+    width: 100%;
+    padding: 6px 40px 10px 10px;
+    font-size: 16px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #fff;
+    color: rgb(118, 118, 118);
+    border: 1px solid rgb(134, 132, 132);
+    border-radius: 4px;
+    cursor: pointer;
+}
