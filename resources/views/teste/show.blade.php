@@ -9,8 +9,17 @@
                 <h3>{{ $user->name }}</h3>
                 <p><strong>E-mail:</strong> {{ $user->email }}</p>
                 <p><strong>CPF:</strong> {{ $user->cpf }}</p>
-                <p><strong>Função:</strong> {{ $user->permission }}</p>
-                <p></p>
+                <p><strong>Cargo:</strong> 
+                    @if ($user->cargo == 0)
+                        Responsável pelo setor
+                    @endif
+                    @if ($user->cargo == 1)
+                        Colaborador Comum
+                    @endif
+                    @if ($user->cargo == 2)
+                        Colaborador tercerizado
+                    @endif
+                </p>  
             </div>
             <div class="card-footer">
                 <a href="{{ url('teste/'.$user->id.'/edit') }}" class="btn btn-warning">Editar</a>

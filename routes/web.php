@@ -29,3 +29,4 @@ Route::resource('livros', LivroController::class);
 Route::resource('autores', AutorController::class);
 Route::resource('teste', UsuarioController::class)->middleware('auth');
 Route::get('teste.permissao/{id}', [UsuarioController::class, 'permissao'])->name('teste.permissao');
+Route::get('/criar-permissoes', [PermissionController::class, 'criarPermissoes']);

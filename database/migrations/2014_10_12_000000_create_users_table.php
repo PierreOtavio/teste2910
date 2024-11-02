@@ -16,7 +16,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('role')->default('viewer');
+            $table->string('cargo')->default('viewer');
             $table->string('cpf')->unique()->default('00000000000');
             $table->string('email')->unique();
             $table->timestamp('cpf_verified_at')->nullable();

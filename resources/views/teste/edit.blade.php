@@ -56,6 +56,25 @@
                             </div>
                         </div>
 
+                        <div class="mb-3 row">
+                            <label for="cargo" class="col-md-4 col-form-label text-md-end">Centro de Custo</label>
+                            <div class="col-md-6">
+                                <div class="custom-select-wrapper">
+                                    <select class="custom-select" id="cargo" name="cargo" request>
+                                        <option value="" disabled selected>Escolha uma opção</option>
+                                        <option value="0">Responsável pelo setor</option>
+                                        <option value="1">Colaborador comum</option>
+                                        <option value="2">Colaborador terceirizado</option>
+                                    </select>
+                                </div>
+                                @error('cargo')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
                         {{-- <div class="row mb-3">
                             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
 

@@ -1,8 +1,7 @@
-@extends('adminlte::page')
+
 @extends('layouts.darkMode')
 @section('title', 'Home')
 @section('content_header')
-
     <h1>Seja Bem-Vindo</h1>
 @stop
 @section('content')

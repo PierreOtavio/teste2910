@@ -17,15 +17,7 @@ class Usuario extends Model
         'cpf',
         'email',
         'password',
-        'role',
+        'cargo',
     ];
-    public function hasPermission($permission)
-    {
-        $permissions = [
-            'admin' => ['create', 'edit', 'delete', 'view'],
-            'viewer' => ['view'],
-        ];
-
-        return isset($permissions[$this->role]) && in_array($permission, $permissions[$this->role]);
-    }
+    
 }

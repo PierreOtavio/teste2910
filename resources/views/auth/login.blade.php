@@ -39,13 +39,18 @@
                             </div>
                         </div>
 
-                        <div class="row mb-3">
-                            <label for="cpf" class="col-md-4 col-form-label text-md-end">{{ __('Centro de Custo') }}</label>
-
+                        <div class="mb-3 row">
+                            <label for="cargo" class="col-md-4 col-form-label text-md-end">Centro de Custo</label>
                             <div class="col-md-6">
-                                <input id="cpf" type="select" class="form-control @error('permissoes') is-invalid @enderror" name="permissoes" value="{{ old('permissoes') }}" required autocomplete="permissoes" autofocus>
-
-                                @error('permissoes')
+                                <div class="custom-select-wrapper">
+                                    <select class="bustom-select" id="cargo" name="cargo" request>
+                                        <option value="" disabled selected>Escolha uma opção</option>
+                                        <option value="0">Responsável pelo setor</option>
+                                        <option value="1">Colaborador comum</option>
+                                        <option value="2">Colaborador terceirizado</option>
+                                    </select>
+                                </div>
+                                @error('cargo')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

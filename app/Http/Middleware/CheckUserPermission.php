@@ -10,7 +10,7 @@ class CheckUserPermission
     public function handle(Request $request, Closure $next, $permission)
     {
         // Verifica se o usuário está autenticado e tem a permissão
-        if (auth()->check() && auth()->user()->hasPermission($permission)) {
+        if (auth()->check() && auth()->user()->hasPermissionTo($permission)) {
             return $next($request);
         }
 
