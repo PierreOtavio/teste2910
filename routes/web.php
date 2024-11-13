@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VeiculoController;
+use App\Http\Controllers\SolicitarController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -28,5 +29,6 @@ Route::resource('veiculos', VeiculoController::class);
 Route::patch('/veiculos/{veiculo}/status', [VeiculoController::class, 'mudarStatus'])->name('veiculos.mudarStatus')->middleware('auth');
 Route::post('/veiculos/{veiculo}/funcionamento', [VeiculoController::class, 'mudarStatus']);
 Route::post('/veiculos/{id}/mudarStatus', [VeiculoController::class, 'mudarStatus'])->name('veiculos.mudarStatus');
-Route::get('solicitar.index', [VeiculoController::class, 'solicitarCarro'])->name('solicitar.index');
+Route::get('solicitar/{id}', [VeiculoController::class, 'solicitarCarro'])->name('solicitar.index');
+// Route::resource('solicitar', SolicitarController::class);
 

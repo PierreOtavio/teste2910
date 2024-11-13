@@ -17,7 +17,7 @@ class CreateVeiculosTable extends Migration
             $table->id();
             $table->string('placa')->unique();
             $table->string('chassi')->unique();
-            $table->string('funcionamento')->default('disponível');
+            $table->string('funcionamento')->default('indisponível');
             $table->integer('ano');
             $table->string('modelo');
             $table->string('marca');
@@ -25,7 +25,7 @@ class CreateVeiculosTable extends Migration
             $table->integer('capacidade');
             $table->integer('km_atual')->default('000');
             $table->text('observacao')->nullable();
-            $table->string('qrcode')->unique();
+            $table->string('qrcode')->nullable();
             $table->timestamps();
         });
     }

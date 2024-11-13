@@ -147,3 +147,10 @@
     .toggle-switch-handle {
     transform: translateX(40px);
 }
+
+.carro1 {
+    color: #00d68f;
+}
+.carro2 {
+    color: crimson;
+}

@@ -314,11 +314,35 @@ return [
             'url' => 'teste',
             'icon' => 'fas fa-user',
         ],
+
         [
-            'text' => 'Veículos',
-            'url' => 'veiculos',
+            'text' => 'Controle de Veículos',
             'icon' => 'fas fa-car',
+            'submenu' => [
+                [
+                    'text' => 'Veículos',
+                    'url' => 'veiculos',
+                    'icon' => 'fas fa-car',
+                ],
+                [
+                    'text' => 'Solicitar Veículo',
+                    'url' => 'solicitar',
+                    'icon' =>'fas fa-file-alt'
+                ]
+            ]
         ]
+
+        // [
+        //     'text' => 'Veículos',
+        //     'url' => 'veiculos',
+        //     'icon' => 'fas fa-car',
+        // ],
+
+        // [
+        //     'text' => 'Solicitar um Veículo',
+        //     'url' => 'solicitar',
+        //     'icon' => 'fas fa-ok',
+        // ]
    /*     [
             'text' => 'Categorias',
             'url' => 'categorias',

@@ -102,10 +102,22 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Certeza que deseja excluir?')">Excluir</button>
                             </form>
+                        </td>
                     @else
-                            <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
+                        @if ($veiculo->funcionamento == 0)
+                            <div class="carro1">
+                            <i class="fas fa-car"></i>
+                            </div>
+                        @else 
+                            <div class="carro2">
+                            <i class="fas fa-car"></i>
+                            </div>
+                        @endif
+                    <td>
+                        <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
+                    </td>
+
                     @endif
-                            </td>
                             
                             
                 

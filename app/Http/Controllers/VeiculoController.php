@@ -148,10 +148,9 @@ class VeiculoController extends Controller
         }
     }
     
-    public function solicitarCarro(Request $request,Veiculo $veiculo) {
-
-        $veiculos = Veiculo::all();
+    public function solicitarCarro( Request $request, $id) {
+        
+        $veiculo = Veiculo::findOrFail($id);
         return view('solicitar.index', compact('veiculo'));
-
     }
 }
