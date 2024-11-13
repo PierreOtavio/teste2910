@@ -4,9 +4,55 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <link rel="stylesheet" href="{{ asset('css/custom-dark-mode.css') }}">
 
-    <h1>Veículo {{$veiculo->marca}} - {{$veiculo->modelo}} </h1>
-
+    <h1>Veículos Disponíveis</h1>
+    <form action="{{ route('solicitar.index') }}" method="GET">
+        <input class="btn btn-novo" name="search" placeholder="Buscar veículo" value="{{ request('search') }}">
+        <button type="submit" class="btn btn-novo">Buscar</button>
+    </form>
 @stop
 
 @section('content')
-   
+   <div class="content">
+    @if (session('sucess')) 
+        <div class="alert alert-success" role="alert">
+           {{ session('sucess') }}
+        </div>
+   </div>
+   @endif
+   <table class="table table-bordered table-hover">
+       <thead>
+           <tr>
+                <th>Veículos:</th>
+                <th>Placa:</th>
+                <th>Funcionamento:</th>
+                <th>Gererciamento:</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($veiculos as $veiculo)
+            @if ($veiculo->funcionamento == 0)
+            <tr>
+                <td>{{ $veiculo->marca}} - {{ $veiculo->modelo }}</td>
+                <td>{{ $veiculo->placa}}</td>
+                <td>
+                    <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{ route('veiculos.edit', $veiculo->id) }}" class="btn btn-info btn-sm">Editar</a>
+                    <form action="{{ route('veiculos.destroy', $veiculo->id) }}" method="POST" style="display: inline-block">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Certeza que deseja excluir?')">Excluir</button>
+                    </form>
+                </td>
+                   
+                        <td>
+                            <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
+                        </td>
+                        
+                        
+                        
+                        
+                    </tr>
+                    @endif
+                    @endforeach
+        </tbody>
+        @stop

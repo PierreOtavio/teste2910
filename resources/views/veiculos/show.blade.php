@@ -28,7 +28,7 @@
             </div>
             <div class="card-footer">
                 @if (auth()->user()->cargo == 0) 
-                <a href="{{ route('solicitar.index', ['id' => $veiculo->id]) }}" class="btn btn-info ">Solicitar veículo</a> 
+                    <a href="{{ route('solicitar.ver', ['id' => $veiculo->id]) }}" class="btn btn-info ">Solicitar veículo</a> 
                     <a href="{{ url('veiculos/'.$veiculo->id.'/edit') }}" class="btn btn-warning">Editar</a>
                     <form action="{{ url('veiculos/'.$veiculo->id) }}" method="POST" style="display:inline-block;">
                         @csrf
@@ -36,7 +36,7 @@
                         <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
                     </form>
                 @else
-                    <a href="{{ route('solicitar.index') }}" class="btn btn-info">Solicitar veículo</a> 
+                    <a href="{{ route('solicitar.ver') }}" class="btn btn-info">Solicitar veículo</a> 
                 @endif
             </div>
         </div>

@@ -148,9 +148,23 @@ class VeiculoController extends Controller
         }
     }
     
+    //PARTE DE SOLICITAR UM VEÍCULO:
     public function solicitarCarro( Request $request, $id) {
         
         $veiculo = Veiculo::findOrFail($id);
-        return view('solicitar.index', compact('veiculo'));
+        return view('solicitar.ver', compact('veiculo'));
+    }
+
+    public function solicitarIndex(Request $request) {
+        $query = Veiculo::query();
+        if ($request->filled('search')) {
+            $query->where('placa', 'like', '%' . $request->search . '%')
+                  ->orwhere('chassi', 'like', '%' . $request->search . '%')
+                  ->orwhere('marca', 'like', '%' . $request->search . '%')
+                  ->orwhere('modelo', 'like', '%' . $request->search . '%');
+        }
+
+        $veiculos = $query->get();
+        return view('solicitar.index', compact('veiculos'));
     }
 }

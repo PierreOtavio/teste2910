@@ -29,6 +29,7 @@ Route::resource('veiculos', VeiculoController::class);
 Route::patch('/veiculos/{veiculo}/status', [VeiculoController::class, 'mudarStatus'])->name('veiculos.mudarStatus')->middleware('auth');
 Route::post('/veiculos/{veiculo}/funcionamento', [VeiculoController::class, 'mudarStatus']);
 Route::post('/veiculos/{id}/mudarStatus', [VeiculoController::class, 'mudarStatus'])->name('veiculos.mudarStatus');
-Route::get('solicitar/{id}', [VeiculoController::class, 'solicitarCarro'])->name('solicitar.index');
+Route::get('solicitar/{id}', [VeiculoController::class, 'solicitarCarro'])->name('solicitar.ver');
 // Route::resource('solicitar', SolicitarController::class);
+Route::get('solicitar', [VeiculoController::class, 'solicitarIndex'])->name('solicitar.index');
 
