@@ -53,12 +53,14 @@ class VeiculoController extends Controller
         $veiculo = Veiculo::create($validation);
 
         // Gerar QR Code com o ID do veículo
-        $qrCode = QrCode::generate($veiculo->id);  // Use o ID do veículo aqui
+        $qrCode = QrCode::generate($veiculo);  // Use o ID do veículo aqui
         $fileName = time() . '.svg'; // Nome único para o arquivo
         file_put_contents(public_path('qrcodes/' . $fileName), $qrCode);
     
         // Atualizar o veículo com o caminho do QR Code
         $veiculo->update(['qr_code' => $fileName]);
+       
+
         
         return redirect()->route('veiculos.index')->with('sucess', 'Veículo criado com sucesso!');
     }
@@ -72,6 +74,7 @@ class VeiculoController extends Controller
      */
     public function show(Veiculo $veiculo)
     {
+       
         return view('veiculos.show', compact('veiculo'));
     }
 

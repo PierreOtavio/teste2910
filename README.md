@@ -1,5 +1,5 @@
 Passo a passo:
-Passo 1: Baixar Deve baixar o repositório no seu VS Code, pode ser feito da seguinte forma(selecione a branch "novab"):
+Passo 1: Baixar Deve baixar o repositório no seu VS Code, pode ser feito da seguinte forma(selecione a branch "funcional"):
 1 - download do arquivo zip (clique em "", um botão verde, e selecione Download zip);
 2 - "deszipar" a pasta;
 3 - abrir a pasta no VS Code;

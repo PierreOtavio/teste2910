@@ -19,5 +19,6 @@ class Veiculo extends Model
         'km_atual',
         'observacao',
         'funcionamento',
+        'qr_code',
     ];
 }
