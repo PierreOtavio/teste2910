@@ -24,9 +24,8 @@
            <tr>
                 <th>Veículos:</th>
                 <th>Placa:</th>
-                <th>Funcionamento:</th>
-                <th>Gererciamento:</th>
-            </tr>
+                <th>Dados:</th>
+                
         </thead>
         <tbody>
             @foreach ($veiculos as $veiculo)
@@ -36,21 +35,7 @@
                 <td>{{ $veiculo->placa}}</td>
                 <td>
                     <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
-                    <a href="{{ route('veiculos.edit', $veiculo->id) }}" class="btn btn-info btn-sm">Editar</a>
-                    <form action="{{ route('veiculos.destroy', $veiculo->id) }}" method="POST" style="display: inline-block">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Certeza que deseja excluir?')">Excluir</button>
-                    </form>
                 </td>
-                   
-                        <td>
-                            <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
-                        </td>
-                        
-                        
-                        
-                        
                     </tr>
                     @endif
                     @endforeach

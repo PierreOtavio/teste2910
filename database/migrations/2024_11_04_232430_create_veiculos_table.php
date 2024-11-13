@@ -25,7 +25,7 @@ class CreateVeiculosTable extends Migration
             $table->integer('capacidade');
             $table->integer('km_atual')->default('000');
             $table->text('observacao')->nullable();
-            $table->string('qrcode')->nullable();
+            $table->string('qr_code')->nullable();
             $table->timestamps();
         });
     }

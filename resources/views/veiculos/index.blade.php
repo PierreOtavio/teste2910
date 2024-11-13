@@ -86,7 +86,6 @@
                             <label class="toggle-switch">
                                 <input type="checkbox" 
                                     id="funcionamento_{{ $veiculo->id }}" 
-                                    {{-- @dd($veiculo); --}}
                                         {{ $veiculo->funcionamento ? '' : 'checked' }} 
                                             onchange="toggleFuncionamento({{ $veiculo->id }}, this.checked)">
                                                 <div class="toggle-switch-background">

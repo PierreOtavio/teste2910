@@ -24,7 +24,8 @@
                     @elseif ($veiculo->funcionamento == 1)
                             Indisponível
                     @endif </p>
-                    <p><strong>QR Code: </strong>    </p>
+                    <p><strong>QR Code: </strong></p>
+                    <img src="{{ asset('qrcodes/' . $veiculo->qr_code) }}" alt="QR Code do veículo">
             </div>
             <div class="card-footer">
                 @if (auth()->user()->cargo == 0) 

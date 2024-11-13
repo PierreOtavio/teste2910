@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Veiculo;
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode; //extensão para o Qr Code
 
 class VeiculoController extends Controller
 {
@@ -33,25 +34,35 @@ class VeiculoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Veiculo $veiculo)
+    public function store(Request $request)
     {
+        // Validação dos dados
         $validation = $request->validate([
             'ano' => 'required|integer|digits:4',
-            'marca' => 'required|string|max: 50',
-            'modelo' => 'required|string|max: 50',
-            'placa' => 'required|string|max: 7',
-            'cor' => 'required|string|max: 20',
-            'chassi' => 'required|string|max: 17',
-            'capacidade' => 'required|integer|max: 20',
-            'km_atual' => 'required|integer|',
-            'observacao' =>'nullable|string|',
+        'marca' => 'required|string|max: 50',
+        'modelo' => 'required|string|max: 50',
+        'placa' => 'required|string|max: 7',
+        'cor' => 'required|string|max: 20',
+        'chassi' => 'required|string|max: 17',
+        'capacidade' => 'required|integer|max: 20',
+        'km_atual' => 'required|integer|',
+        'observacao' =>'nullable|string|',
             'funcionamento' => 'required|string',
         ]);
 
-        $veiculo::create($validation);
+        $veiculo = Veiculo::create($validation);
 
-        return redirect()->route('veiculos.index')->with('sucess',  'Veiculo criado com sucesso!');
+        // Gerar QR Code com o ID do veículo
+        $qrCode = QrCode::generate($veiculo->id);  // Use o ID do veículo aqui
+        $fileName = time() . '.svg'; // Nome único para o arquivo
+        file_put_contents(public_path('qrcodes/' . $fileName), $qrCode);
+    
+        // Atualizar o veículo com o caminho do QR Code
+        $veiculo->update(['qr_code' => $fileName]);
+        
+        return redirect()->route('veiculos.index')->with('sucess', 'Veículo criado com sucesso!');
     }
+
 
     /**
      * Display the specified resource.

@@ -26,7 +26,9 @@ DB_PORT=3306
 DB_DATABASE=alfa1 (trocar o nome do banco de dados de acordo com o que foi criado no 'cmd' ou no 'workbench')
 DB_USERNAME=root
 DB_PASSWORD= (colocar a senha caso seu acesso ao mysql necessite de senha)
-4 - php artisan serve (irá abrir a página web)
+4 - php artisan migrate
+5 - composer require simplesoftwareio/simple-qrcode
+6 - php artisan serve (irá abrir a página web)
 
 Passo 5: Fazer o Register
 No canto superior direito irá aparecer duas opções: login e register, por ser a primeira vez, faça o register e pronto, já tem o acesso às views.
