@@ -39,21 +39,21 @@ class VeiculoController extends Controller
         // Validação dos dados
         $validation = $request->validate([
             'ano' => 'required|integer|digits:4',
-        'marca' => 'required|string|max: 50',
-        'modelo' => 'required|string|max: 50',
-        'placa' => 'required|string|max: 7',
-        'cor' => 'required|string|max: 20',
-        'chassi' => 'required|string|max: 17',
-        'capacidade' => 'required|integer|max: 20',
-        'km_atual' => 'required|integer|',
-        'observacao' =>'nullable|string|',
+            'marca' => 'required|string|max: 50',
+            'modelo' => 'required|string|max: 50',
+            'placa' => 'required|string|max: 7',
+            'cor' => 'required|string|max: 20',
+            'chassi' => 'required|string|max: 17',
+            'capacidade' => 'required|integer|max: 20',
+            'km_atual' => 'required|integer|',
+            'observacao' =>'nullable|string|',
             'funcionamento' => 'required|string',
         ]);
 
         $veiculo = Veiculo::create($validation);
 
         // Gerar QR Code com o ID do veículo
-        $qrCode = QrCode::generate($veiculo);  // Use o ID do veículo aqui
+        $qrCode = QrCode::generate($veiculo->id);  // Use o ID do veículo aqui
         $fileName = time() . '.svg'; // Nome único para o arquivo
         file_put_contents(public_path('qrcodes/' . $fileName), $qrCode);
     
@@ -166,7 +166,7 @@ class VeiculoController extends Controller
     public function solicitarCarro( Request $request, $id) {
         
         $veiculo = Veiculo::findOrFail($id);
-        return view('solicitar.ver', compact('veiculo'));
+        return view('solicitar.create', compact('veiculo'));
     }
 
     public function solicitarIndex(Request $request) {

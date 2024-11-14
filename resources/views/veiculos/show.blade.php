@@ -1,4 +1,3 @@
-
 @extends('layouts.darkMode')
 
 @section('content_header')
@@ -29,13 +28,7 @@
             </div>
             <div class="card-footer">
                 @if (auth()->user()->cargo == 0) 
-                @if ($veiculo->funcionamento == 0)
-                <a href="{{ route('solicitar.ver', ['id' => $veiculo->id]) }}" class="btn btn-info">Solicitar veículo</a> 
-                @else
-                    <div class="botao-cinza">
-                    <a href="{{ url('veiculos/'.$veiculo->id.'/show')}}" class="btn btn-info">Veículo indisponível</a>
-                    </div>
-                @endif
+                <a href="{{ route('solicitar.create', $veiculo->id) }}" class="btn btn-info">Solicitar Veículo</a> 
                     <a href="{{ url('veiculos/'.$veiculo->id.'/edit') }}" class="btn btn-warning">Editar</a>
                     <form action="{{ url('veiculos/'.$veiculo->id) }}" method="POST" style="display:inline-block;">
                         @csrf
@@ -43,13 +36,7 @@
                         <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
                     </form>
                 @else
-                    @if ($veiculo->funcionamento == 0)
-                    <a href="{{ route('solicitar.ver', ['id' => $veiculo->id]) }}" class="btn btn-info">Solicitar veículo</a> 
-                    @else
-                    <div class="botao-cinza">
-                    <a href="{{ url('veiculos/'.$veiculo->id.'/show')}}" class="btn btn-info">Veículo indisponível</a>
-                    </div>
-                    @endif
+                <a href="{{ route('solicitar.create', $veiculo->id) }}" class="btn btn-info">Solicitar Veículo</a>
                 @endif
             </div>
         </div>

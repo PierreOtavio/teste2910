@@ -34,7 +34,7 @@
                 <td>{{ $veiculo->marca}} - {{ $veiculo->modelo }}</td>
                 <td>{{ $veiculo->placa}}</td>
                 <td>
-                    <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{ route('solicitar.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
                 </td>
                     </tr>
                     @endif
