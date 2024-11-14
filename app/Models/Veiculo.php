@@ -21,4 +21,9 @@ class Veiculo extends Model
         'funcionamento',
         'qr_code',
     ];
+    public function solicitacoes()
+    {
+        return $this->hasMany(Solicitar::class);
+    }
+
 }

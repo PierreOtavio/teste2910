@@ -24,7 +24,7 @@
                             </div>
                         @endif
 
-
+                        <input type="hidden" name="veiculo_id" value="{{ $veiculo->id }}">
                         
                         <div class="row mb-3">
                             <label for="data_inicial" class="col-md-4 col-form-label text-md-end">{{ __('Data de retirada:') }}</label>

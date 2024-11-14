@@ -23,18 +23,20 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//USUÁRIOS
 Route::resource('teste', UsuarioController::class)->middleware('auth');
 Route::get('teste.permissao/{id}', [UsuarioController::class, 'permissao'])->name('teste.permissao');
-Route::resource('veiculos', VeiculoController::class);
-Route::patch('/veiculos/{veiculo}/status', [VeiculoController::class, 'mudarStatus'])->name('veiculos.mudarStatus')->middleware('auth');
-Route::post('/veiculos/{veiculo}/funcionamento', [VeiculoController::class, 'mudarStatus']);
+//VEÍCULOS
+Route::resource('veiculos', VeiculoController::class)->middleware('auth');
 Route::post('/veiculos/{id}/mudarStatus', [VeiculoController::class, 'mudarStatus'])->name('veiculos.mudarStatus');
-Route::get('solicitar/create/{id}', [VeiculoController::class, 'solicitarCarro'])->name('solicitar.create');
+//SOLICITAÇÕES:
 Route::get('solicitar', [VeiculoController::class, 'solicitarIndex'])->name('solicitar.index');
-Route::get('solicitar/{id}', [SolicitarController::class, 'show'])->name('solicitar.show');
-Route::post('solicitar/store', [SolicitarController::class, 'store'])->name('solicitar.store');
+Route::get('solicitar/create/{id}', [VeiculoController::class, 'solicitarCarro'])->name('solicitar.create');
 // Route::get('solicitar/create', [SolicitarController::class], 'solicitarCarro')->name('solicitar.create');
-Route::get('solicitação', [SolicitarController::class, 'index'])->name('solicitacao.index');
+Route::post('solicitar/store', [SolicitarController::class, 'store'])->name('solicitar.store');
+Route::get('solicitar/{id}', [SolicitarController::class, 'show'])->name('solicitar.show');
+// Route::get('solicitação', [SolicitarController::class, 'index'])->name('solicitacao.index');
+Route::get('solicitar/ver/{id}', [SolicitarController::class, 'ver'])->name('solicitar.ver');
 
 
 // Route::resource('solicitar', SolicitarController::class);

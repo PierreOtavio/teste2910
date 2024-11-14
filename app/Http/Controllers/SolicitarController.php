@@ -10,29 +10,41 @@
     class SolicitarController extends Controller
     {
         public function index()
-        {
-            $veiculos = Veiculo::all();
-            return view ('solicitar.index', compact ('veiculos'));
-        }
+{
+    // Carrega as solicitações junto com os veículos relacionados
+    $solicitars = Solicitar::with('veiculo')->get();
+    
+    // Retorna a view com os dados
+    return view('solicitar.show', compact('solicitars'));
+}
 
-        public function create(Veiculo $veiculo) 
+
+        public function create($veiculo_id) 
         {
-            return view ('solicitar.create');
+            $veiculo = Veiculo::findOrFail($veiculo_id);
+            return view('solicitar.create', compact('veiculo'));
         }
         
         public function store(Request $request)
         {
             $validation = $request->validate([
+                'veiculo_id' => 'required|exists:veiculos,id',
                 'hora_inicial' => 'required|string', 
                 'data_inicial' => 'required|date',
                 'data_final' => 'required|date',
-                'motivo' => 'required|string|max:255'
+                'motivo' => 'required|string|max:255',
             ]);
 
     
-            $solicitar = Solicitar::create($validation);
+            $solicitar = new Solicitar();
+            $solicitar->veiculo_id = $request->veiculo_id;
+            $solicitar->data_inicial = $request->data_inicial;
+            $solicitar->hora_inicial = $request->hora_inicial;
+            $solicitar->data_final = $request->data_final;
+            $solicitar->motivo = $request->motivo;
+            $solicitar->save();
 
-            return redirect()->route('solicitacao.index')->with('Sua solicitação foi enviada com sucesso!');
+            return redirect()->route('solicitar.index');
         }
 
         /**
@@ -41,11 +53,21 @@
          * @param  \App\Models\Solicitar  $solicitar
          * @return \Illuminate\Http\Response
          */
-        public function show(Veiculo $veiculo, Solicitar $solicitar)
+        public function show($id)
         {    
-            $solicitars = Solicitar::all();
-            return view ('solicitar.show', compact ('veiculo','solicitars'));
+            $solicitacao = Solicitar::find($id);
+
+    // Verifica se a solicitação foi encontrada
+        if (!$solicitacao) {
+            return redirect()->route('solicitacao.index')->with('error', 'Solicitação não encontrada');
         }
+
+    // Recupera o veículo relacionado à solicitação
+        $veiculo = $solicitacao->veiculo;
+
+        return view('solicitar.show', compact('solicitacao', 'veiculo'));
+    }
+        
         /**
          * Show the form for editing the specified resource.
          *

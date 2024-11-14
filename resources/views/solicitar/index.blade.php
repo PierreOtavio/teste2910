@@ -34,7 +34,7 @@
                 <td>{{ $veiculo->marca}} - {{ $veiculo->modelo }}</td>
                 <td>{{ $veiculo->placa}}</td>
                 <td>
-                    <a href="{{ route('solicitar.create', $veiculo->id) }}" class="btn btn-info btn-sm">Reservar</a>
+                    <a class="btn btn-info" href="{{ route('solicitar.create', $veiculo->id) }}">Solicitar</a>
                 </td>
                     </tr>
                     @endif

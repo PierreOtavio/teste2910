@@ -7,25 +7,26 @@
     <h1>Minhas solicitações</h1>
 
 
-<table class="table table-bordered table-hover">
-    <thead>
-        <tr>
-             <th>Data de retirada:</th>
-             <th>Hora de retirada :</th>
-             <th>Data de devolução:</th>
-        </tr>
-             
-     </thead>
-     <tbody>
-         @foreach ($solicitars as $solicitar)
-         <tr>
-             <td>{{ $solicitar->data_inicial}} </td>
-             <td> {{ $solicitar->hora_inicial }}</td>
-             <td>{{ $solicitar->data_final}}</td>
-             <td>
-                {{-- <a href="{{ route('veiculos.show', $solicitar->reserva) }}" class="btn btn-info btn-sm">Ver</a> --}}
-             </td>
-                 </tr>
-                 @endforeach
-    </tbody>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Veículo:</th>
+                <th>Retirada :</th>
+                <th>Mais informações:</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($solicitars as $solicitar)
+            <tr>
+                <!-- Acessando as informações do veículo através do relacionamento -->
+                <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
+                <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
+                <td>
+                    <a href="{{ route('solicitar.ver', $solicitar->veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
     @endsection

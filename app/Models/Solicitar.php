@@ -15,4 +15,8 @@ class Solicitar extends Model
         'data_final',
         'veiculo_id',
     ];
+    public function veiculo()
+    {
+        return $this->belongsTo(Veiculo::class);
+    }
 }
