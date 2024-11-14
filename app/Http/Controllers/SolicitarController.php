@@ -9,13 +9,9 @@
 
     class SolicitarController extends Controller
     {
-        /**
-         * Display a listing of the resource.
-         *
-         * @return \Illuminate\Http\Response
-         */
         public function index()
         {
+            $veiculos = Veiculo::all();
             return view ('solicitar.index', compact ('veiculos'));
         }
 
@@ -27,16 +23,16 @@
         public function store(Request $request)
         {
             $validation = $request->validate([
-                'hora_inicial' => 'required|string',
-                'hora_final' => 'required|string',
+                'hora_inicial' => 'required|string', 
                 'data_inicial' => 'required|date',
                 'data_final' => 'required|date',
                 'motivo' => 'required|string|max:255'
             ]);
+
     
             $solicitar = Solicitar::create($validation);
 
-            return view('solicitar.index')->with('Sua solicitação foi enviada com sucesso!');
+            return redirect()->route('solicitacao.index')->with('Sua solicitação foi enviada com sucesso!');
         }
 
         /**
@@ -47,7 +43,8 @@
          */
         public function show(Veiculo $veiculo, Solicitar $solicitar)
         {    
-            return view ('solicitar.show', compact ('veiculo','solicitar'));
+            $solicitars = Solicitar::all();
+            return view ('solicitar.show', compact ('veiculo','solicitars'));
         }
         /**
          * Show the form for editing the specified resource.

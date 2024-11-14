@@ -16,7 +16,7 @@ class CreateSolicitarsTable extends Migration
         Schema::create('solicitars', function (Blueprint $table) {
             $table->id();
             $table->time('hora_inicial');
-            $table->time('hora_final');
+            $table->time('hora_final')->nullable();
             $table->date('data_inicial');
             $table->date('data_final');
             $table->text('motivo')->default('Não explicado');

@@ -328,7 +328,12 @@ return [
                     'text' => 'Solicitar Veículo',
                     'url' => 'solicitar',
                     'icon' =>'fas fa-file-alt'
-                ]
+                ],
+                [
+                    'text' => 'Minhas solicitações',
+                    'url' => 'solicitar/{id}',
+                    'icon' => 'fas fa-calendar',
+                ],
             ]
         ]
 

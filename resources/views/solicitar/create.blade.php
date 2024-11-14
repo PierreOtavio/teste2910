@@ -8,7 +8,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header"> <h2>Fazer uma solicitação: {{ $veiculo->marca }} {{ $veiculo->modelo }}</h2>
+                <div class="card-header"> <h2>Fazer uma solicitação: {{ $veiculo->marca }} {{ $veiculo->modelo }} - {{ $veiculo->cor }} </h2>
                     <h4>Placa: {{ $veiculo->placa }} </h4> </div>
 
                 <div class="card-body">
@@ -24,17 +24,6 @@
                             </div>
                         @endif
 
-                        <div class="row mb-3">
-                            <label for="motivo" class="col-md-4 col-form-label text-md-end">{{ __('Motivo de utilização:') }}</label>
-                            <div class="col-md-6">
-                                <input id="motivo" type="text" class="form-control @error('motivo') is-invalid @enderror" name="motivo">
-                                @error('motivo')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
 
                         
                         <div class="row mb-3">
@@ -74,11 +63,13 @@
                             </div>
                         </div>
 
+                        
+
                         <div class="row mb-3">
-                            <label for="hora_final" class="col-md-4 col-form-label text-md-end">{{ __('Hora de devolução:') }}</label>
+                            <label for="motivo" class="col-md-4 col-form-label text-md-end">{{ __('Motivo de utilização:') }}</label>
                             <div class="col-md-6">
-                                <input id="hora_final" type="time" class="form-control @error('hora_final') is-invalid @enderror" name="hora_final">
-                                @error('hora_final')
+                                <input id="motivo" type="text" class="form-control @error('motivo') is-invalid @enderror" name="motivo">
+                                @error('motivo')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

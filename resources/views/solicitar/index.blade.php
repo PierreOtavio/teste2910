@@ -24,7 +24,7 @@
            <tr>
                 <th>Veículos:</th>
                 <th>Placa:</th>
-                <th>Dados:</th>
+                <th>Reserva:</th>
                 
         </thead>
         <tbody>
@@ -34,7 +34,7 @@
                 <td>{{ $veiculo->marca}} - {{ $veiculo->modelo }}</td>
                 <td>{{ $veiculo->placa}}</td>
                 <td>
-                    <a href="{{ route('solicitar.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{ route('solicitar.create', $veiculo->id) }}" class="btn btn-info btn-sm">Reservar</a>
                 </td>
                     </tr>
                     @endif

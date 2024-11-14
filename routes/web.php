@@ -34,6 +34,7 @@ Route::get('solicitar', [VeiculoController::class, 'solicitarIndex'])->name('sol
 Route::get('solicitar/{id}', [SolicitarController::class, 'show'])->name('solicitar.show');
 Route::post('solicitar/store', [SolicitarController::class, 'store'])->name('solicitar.store');
 // Route::get('solicitar/create', [SolicitarController::class], 'solicitarCarro')->name('solicitar.create');
+Route::get('solicitação', [SolicitarController::class, 'index'])->name('solicitacao.index');
 
 
 // Route::resource('solicitar', SolicitarController::class);
