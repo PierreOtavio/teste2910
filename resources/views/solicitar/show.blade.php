@@ -13,13 +13,12 @@
             <tr>
                 <th>Veículo:</th>
                 <th>Retirada :</th>
-                <th>Mais informações:</th>
+                <th>Situação:</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($solicitars as $solicitar)
             <tr>
-                <!-- Acessando as informações do veículo através do relacionamento -->
                 <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
                 <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
                 <td>

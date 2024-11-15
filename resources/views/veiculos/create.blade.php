@@ -110,6 +110,18 @@
                         </div>
 
                         <div class="row mb-3">
+                            <label for="km_revisao" class="col-md-4 col-form-label text-md-end">{{ __('Intervalo de KM para a revisão') }}</label>
+                            <div class="col-md-6">
+                                <input id="km_revisao" type="number" class="form-control @error('km_revisao') is-invalid @enderror" name="km_revisao" value="{{ old('km_revisao') }}">
+                                @error('km_revisao')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror 
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
                             <label for="chassi" class="col-md-4 col-form-label text-md-end">{{ __('Chassi') }}</label>
                             <div class="col-md-6">
                                 <input id="chassi" type="text" class="form-control @error('chassi') is-invalid @enderror" name="chassi" value="{{ old('chassi') }}">

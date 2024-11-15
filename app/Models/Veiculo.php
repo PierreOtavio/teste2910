@@ -17,6 +17,7 @@ class Veiculo extends Model
         'chassi',
         'capacidade',
         'km_atual',
+        'km_revisao',
         'observacao',
         'funcionamento',
         'qr_code',

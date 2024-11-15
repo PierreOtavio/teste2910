@@ -109,9 +109,14 @@
 
         // }
 
-        public function ver(Solicitar $solicitar, Veiculo $veiculo) {
+        public function ver(Solicitar $solicitar, Veiculo $veiculo,$id) {
+            $solicitar = Solicitar::find($id);
+
+            // Verifica se a solicitação foi encontrada
+                if (!$solicitar) {
+                    return redirect()->route('solicitacao.index')->with('error', 'Solicitação não encontrada');
+                }
 
             $veiculo = $solicitar->veiculo;
             return view('solicitar.ver',compact('veiculo','solicitar'));
-        }
-     }
+     }}

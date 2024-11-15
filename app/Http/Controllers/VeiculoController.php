@@ -45,7 +45,8 @@ class VeiculoController extends Controller
             'cor' => 'required|string|max: 20',
             'chassi' => 'required|string|max: 17',
             'capacidade' => 'required|integer|max: 20',
-            'km_atual' => 'required|integer|',
+            'km_atual' => 'required|integer',
+            'km_revisao' => 'required|integer',
             'observacao' =>'nullable|string|',
             'funcionamento' => 'required|string',
         ]);
@@ -101,6 +102,7 @@ class VeiculoController extends Controller
                 'chassi' => 'required|string|size:17',
                 'placa' => 'required|string|max:7',
                 'km_atual' => 'required|integer',
+                'km_revisao' => 'required|integer',
                 'observacao' => 'nullable|string',
                 'funcionamento' => 'nullable|string',
             ]);

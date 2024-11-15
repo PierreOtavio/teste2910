@@ -35,7 +35,7 @@ Route::get('solicitar/create/{id}', [VeiculoController::class, 'solicitarCarro']
 // Route::get('solicitar/create', [SolicitarController::class], 'solicitarCarro')->name('solicitar.create');
 Route::post('solicitar/store', [SolicitarController::class, 'store'])->name('solicitar.store');
 Route::get('solicitar/{id}', [SolicitarController::class, 'show'])->name('solicitar.show');
-// Route::get('solicitação', [SolicitarController::class, 'index'])->name('solicitacao.index');
+Route::get('solicitação', [SolicitarController::class, 'index'])->name('solicitacao.index');
 Route::get('solicitar/ver/{id}', [SolicitarController::class, 'ver'])->name('solicitar.ver');
 
 
