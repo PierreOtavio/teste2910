@@ -67,6 +67,29 @@
 
             return view('solicitar.show', compact('solicitacao', 'veiculo'));
         }
+
+
+        public function aprovarOuReprovar($id, Solicitar $solicitar, Veiculo $veiculo, $request) {
+
+            // Busca a solicitação e relaciona com o veículo;
+            $solicitacao = Solicitar::with('veiculo')->findOrFail($id);
+            $veiculo = $solicitacao->veiculo;
+
+            $solicitacao->situacao = $request->situacao;
+            $solicitacao->save();
+
+            if ($request->situacao === 'aprovado') {
+                $veiculo->funcionamento == 1;
+            } else {
+                $veiculo->funcionamento == 0;
+            }
+            $veiculo->save();
+            // dd($veiculo, $solicitacao);
+
+            /* Como não temos ainda uma view de ver solicitações aceitas ou recusadas,
+             eu vou deixar pra voltar pra pagina anterior. */
+            return redirect()->back()->with('sucess', 'Solicitação aprovada com sucesso');
+        }
         
         /**
          * Show the form for editing the specified resource.
@@ -86,26 +109,9 @@
          * @param  \App\Models\Solicitar  $solicitar
          * @return \Illuminate\Http\Response
          */
-        public function update(Request $request, Solicitar $solicitar, $id, Veiculo $veiculo)
+        public function update(Request $request, $id)
         {
-            // Busca a solicitação e relaciona com o veículo;
-            $solicitacao = Solicitar::with('veiculo')->findOrFail($id);
-            $veiculo = $solicitacao->veiculo;
-
-            $solicitacao->situacao = $request->situacao;
-            $solicitacao->save();
-
-            if ($request->situacao === 'aprovado') {
-                $veiculo->funcionamento == 1;
-            } else {
-                $veiculo->funcionamento == 0;
-            }
-            $veiculo->save();
-            // dd($veiculo, $solicitacao);
-
-            /* Como não temos ainda uma view de ver solicitações aceitas ou recusadas,
-             eu vou deixar pra voltar pra pagina anterior. */
-            return redirect()->back()->with('sucess', 'Solicitação aprovada com sucesso');
+            
         }
 
         /**

@@ -37,7 +37,7 @@ Route::post('solicitar/store', [SolicitarController::class, 'store'])->name('sol
 Route::get('solicitar/{id}', [SolicitarController::class, 'show'])->name('solicitar.show');
 Route::get('solicitação', [SolicitarController::class, 'index'])->name('solicitacao.index');
 Route::get('solicitar/ver/{id}', [SolicitarController::class, 'ver'])->name('solicitar.ver');
-Route::put('/solicitar/{id}', [SolicitarController::class, 'update'])->name('solicitar.update');
+Route::put('/solicitar/situacao/{id}', [SolicitarController::class, 'update'])->name('solicitar.update');
 
 
 // Route::resource('solicitar', SolicitarController::class);

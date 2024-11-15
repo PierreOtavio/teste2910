@@ -330,7 +330,7 @@ return [
                     'icon' =>'fas fa-file-alt'
                 ],
                 [
-                    'text' => 'Minhas solicitações',
+                    'text' => 'Solicitações gerais',
                     'url' => 'solicitar/{id}',
                     'icon' => 'fas fa-calendar',
                 ],
