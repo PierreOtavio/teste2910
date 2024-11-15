@@ -14,6 +14,7 @@ class Solicitar extends Model
         'data_inicial',
         'data_final',
         'veiculo_id',
+        'situacao'
     ];
     public function veiculo()
     {
