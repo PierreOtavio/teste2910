@@ -6,11 +6,9 @@
 
 
 @section('content')
-        @if (auth()->user()->cargo == 0) 
-            <h1>Solicitações:</h1>
-
-    
-
+@if($solicitars->isNotEmpty())
+@if (auth()->user()->cargo == 0) 
+    <h1>Solicitações:</h1>
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -25,34 +23,36 @@
                 <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
                 <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
                 <td>
-                    <a href="{{ route('solicitar.ver', $solicitar->veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{ route('solicitar.ver', $solicitar->id) }}" class="btn btn-info btn-sm">Ver</a>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
-    @else 
+@else
     <h1>Minhas Solicitações:</h1>
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Veículo:</th>
-                    <th>Retirada :</th>
-                    <th>Situação:</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($solicitars as $solicitar)
-                <tr>
-                    <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
-                    <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
-                    <td>
-                        <a href="{{ route('solicitar.ver', $solicitar->veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @endif
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Veículo:</th>
+                <th>Retirada :</th>
+                <th>Situação:</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($solicitars as $solicitar)
+            <tr>
+                <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
+                <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
+                <td>
+                    <a href="{{ route('solicitar.ver', $solicitar->id) }}" class="btn btn-info btn-sm">Ver</a>
+                </td>
+            </tr>
+            @endforeach
+@endif
+@else
+<p>Não há solicitações disponíveis.</p>
+@endif
+
 
     @endsection
