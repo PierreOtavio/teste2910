@@ -19,5 +19,8 @@ class Usuario extends Model
         'password',
         'cargo',
     ];
-    
+    public function solicitars()
+    {
+        return $this->hasMany(Solicitar::class, 'user_id', 'id');
+    }
 }

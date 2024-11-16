@@ -6,6 +6,8 @@
     use App\Models\Solicitar;
     use App\Models\Veiculo;
     use Illuminate\Http\Request;
+    use App\Models\User;
+    use Illuminate\Support\Facades\Auth;
 
     class SolicitarController extends Controller
     {
@@ -27,6 +29,8 @@
         
         public function store(Request $request)
         {
+            $data['user_id'] = Auth::id();
+            
             $validation = $request->validate([
                 'veiculo_id' => 'required|exists:veiculos,id',
                 'hora_inicial' => 'required|string', 
@@ -35,13 +39,13 @@
                 'motivo' => 'required|string|max:255',
             ]);
 
-    
             $solicitar = new Solicitar();
             $solicitar->veiculo_id = $request->veiculo_id;
             $solicitar->data_inicial = $request->data_inicial;
             $solicitar->hora_inicial = $request->hora_inicial;
             $solicitar->data_final = $request->data_final;
             $solicitar->motivo = $request->motivo;
+            $solicitar->user_id = Auth::id();
             $solicitar->save();
 
             return redirect()->route('solicitar.index');
@@ -53,21 +57,43 @@
          * @param  \App\Models\Solicitar  $solicitar
          * @return \Illuminate\Http\Response
          */
-        public function show($id)
+        public function show(Request $request, $id = null)
         {    
-            $solicitacao = Solicitar::find($id);
+            $user = Auth::user();
 
-            // Verifica se a solicitação foi encontrada
-            if (!$solicitacao) {
-                return redirect()->route('solicitacao.index')->with('error', 'Solicitação não encontrada');
+            // Se um ID for passado, exibe detalhes de uma solicitação específica
+            if ($id) {
+                $solicitar = Solicitar::with('veiculo')->find($id);
+
+                if (!$solicitar) {
+                    return redirect()->route('solicitar.index')->with('error', 'Solicitação não encontrada');
+                }
+
+                return view('solicitar.show', compact('solicitar'));
             }
 
-            // Recupera o veículo relacionado à solicitação
-            $veiculo = $solicitacao->veiculo;
+            // Exibe todas as solicitações ou apenas as do usuário
+            $solicitars = $user->cargo == 0
+                ? Solicitar::with('veiculo')->get()
+                : $user->solicitars()->with('veiculo')->get();
 
-            return view('solicitar.show', compact('solicitacao', 'veiculo'));
+            return view('solicitar.show', compact('solicitars'));
         }
 
+
+            // $solicitar = Solicitar::where('user_id', Auth::id())->find($id);
+
+            // // Verifica se a solicitação foi encontrada
+            // if (!$solicitar) {
+            //     return redirect()->route('solicitacao.index')->with('error', 'Solicitação não encontrada');
+            // }   
+
+            // // Recupera o veículo relacionado à solicitação
+            // $veiculo = $solicitar->veiculo;
+
+            // return view('solicitar.show', compact('solicitar', 'veiculo'));
+            
+        
 
         public function aprovarOuReprovar($id, Solicitar $solicitar, Veiculo $veiculo, $request) {
 

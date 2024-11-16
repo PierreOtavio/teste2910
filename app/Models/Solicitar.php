@@ -14,10 +14,15 @@ class Solicitar extends Model
         'data_inicial',
         'data_final',
         'veiculo_id',
-        'situacao'
+        'situacao',
+        'user_id',
     ];
     public function veiculo()
     {
         return $this->belongsTo(Veiculo::class);
+    }
+    public function user() 
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

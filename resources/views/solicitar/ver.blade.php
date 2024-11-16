@@ -21,7 +21,7 @@
                 <p><strong>Quantos KM faltam para a revisão:</strong> {{ $solicitar->veiculo->km_revisao }}</p>
             </div>
             <div class="card-footer">
-                <a class="btn btn-info" href="#">Iniciar</a>
+                <a class="btn btn-info" href="{{ route('solicitar/aprovarOuReprovar/{id}') }}">Iniciar</a>
                     <form action="{{ url('veiculos/'.$solicitar->veiculo->id) }}" method="POST" style="display:inline-block;">
                         @csrf
                         @method('DELETE')
