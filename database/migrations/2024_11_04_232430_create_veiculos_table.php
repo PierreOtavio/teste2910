@@ -16,6 +16,9 @@ class CreateVeiculosTable extends Migration
         Schema::create('veiculos', function (Blueprint $table) {
             $table->id();
             $table->string('placa')->unique();
+            $table->string('placa_confirmar')->nullable();
+            $table->string('velocimetro_inicio')->nullable();
+            $table->string('velocimetro_final')->nullable();
             $table->string('chassi')->unique();
             $table->string('funcionamento')->default('indisponível');
             $table->integer('ano');

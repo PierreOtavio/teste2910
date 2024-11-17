@@ -1,9 +1,4 @@
 @extends('layouts.darkMode')
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
 
 @section('content_header')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -11,10 +6,20 @@
 <link rel="stylesheet" href="{{ asset('css/custom-dark-mode.css') }}">
 
 
+
 @section('content')
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 @if($solicitars->isNotEmpty())
+
 @if (auth()->user()->cargo == 0) 
+    @section('content_header')
     <h1>Solicitações:</h1>
+    @endsection
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -38,7 +43,9 @@
         </tbody>
     </table>
 @else
-    <h1>Minhas Solicitações:</h1>
+    @section('content_header')
+        <h1>Minhas Solicitações:</h1>
+    @endsection
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -53,7 +60,7 @@
                 <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
                 <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
                 <td>
-                    <a href="{{ route('solicitar.ver', $solicitar->id) }}" class="btn btn-info btn-sm">Ver</a>
+                    <a href="{{ route('solicitar.ver', $solicitar->id) }}" class="btn btn-info">Ver</a>
                 </td>
             </tr>
             @endforeach
@@ -61,7 +68,7 @@
     </table>
 @endif
 @else
-<p>Não há solicitações disponíveis.</p>
+<h2>Não há solicitações realizadas.</h2>
 @endif
 
 

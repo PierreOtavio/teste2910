@@ -1,22 +1,50 @@
 @extends('layouts.darkMode')
 
 @section('content_header')
-    <h1>Solicitação Do dia {{$solicitar->data_inicial}} em progresso</h1>
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
 @stop
 
 @section('content')
-    <div class="content">
-        <div class="card">
-            <div class="card-body">
-                <h3><strong>Data da retirada:</strong> {{ $solicitar->data_inicial }}</h3>
-                <h3><strong>Hora de retirada:</strong> {{ $solicitar->hora_inicial }}</h3>
-                <p><strong>Placa do veículo: {{ $solicitar->veiculo->placa }}</strong></p>
-                <p><strong>Marca:</strong> {{ $solicitar->veiculo->marca }}</p>
-                <p><strong>Modelo:</strong> {{ $solicitar->veiculo->modelo }}</p>
-                <p><strong>Data de devolução:</strong> {{ $solicitar->data_final }}</p>
-                <p><strong>Quantos KM faltam para a revisão:</strong> {{ $solicitar->veiculo->km_revisao }}</p>
-
-                <a href="{{ route('solicitar.index', $solicitar->veiculo->id) }}" class="btn btn-info">Finalizar utilização do veículo</a>
-        </div>
-    </div>
+<div class="content">
+    <div class="card">
+        <div class="card-body">
+                <h3>Solicitação do {{ $solicitar->veiculo->marca}} {{ $solicitar->veiculo->modelo}} - Em progresso</h3>
+                <h4><strong>Retirada prevista:</strong> {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} às {{ \Carbon\Carbon::parse($solicitar->hora_inicial)->format('H\hi') }}</h4>
+                <form action="{{ route('solicitar.prosseguir', $solicitar->id) }}" method="POST">
+                    @csrf
+                    <div class="row mb-3">
+                        <p><strong>Placa do veículo:</strong></p>
+                        <div class="col-md-6">
+                            <input id="placa_confirmar" type="text" class="form-control @error('placa_confirmar') is-invalid @enderror" name="placa_confirmar" required>
+                            @error('placa_confirmar')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror   
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <p><strong>Km marcado no velocímetro:</strong></p>
+                        <div class="col-md-6">
+                            <input id="velocimetro_inicio" type="text" class="form-control @error('velocimetro_inicio') is-invalid @enderror" name="velocimetro_inicio" required>
+                            @error('velocimetro_inicio')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-info">Prosseguir</button>
+                </div>
+            </form>
+            </div>
 @endsection

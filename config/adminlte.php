@@ -330,11 +330,6 @@ return [
                     'url' => 'solicitar/{id}',
                     'icon' => 'fas fa-calendar',
                 ],
-                [
-                    'text' => 'Aprovar/Reprovar Solicitações',
-                    'url' => '',
-                    'icon' => 'fas fa-check',
-                ],
             ]
         ]
     ],

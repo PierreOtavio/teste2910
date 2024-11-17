@@ -46,6 +46,11 @@ Route::get('solicitar/{id}', [SolicitarController::class, 'index'])->name('solic
 Route::get('solicitar/ver/{id}', [SolicitarController::class, 'ver'])->name('solicitar.ver');
 
 Route::get('solicitar/start/{id}', [SolicitarController::class, 'start'])->name('solicitar.start');
+
+Route::post('solicitar/prosseguir/{id}', [SolicitarController::class, 'prosseguir'])->name('solicitar.prosseguir');
+
+
+Route::get('solicitar/end/{id}', [SolicitarController::class, 'end'])->name('solicitar.end');
 //Teste de aceitar e recusar:
 Route::post('/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])->name('solicitar.aceitar');
 Route::post('/solicitar/{id}/recusar', [SolicitarController::class, 'recusar'])->name('solicitar.recusar');

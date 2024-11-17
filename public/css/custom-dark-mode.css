@@ -198,3 +198,66 @@
     width: 200px;
     height: auto;
 }
+
+/* Estilização do card */
+.card {
+    border: 1px solid #6c757d;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(145deg, #1f2937, #2d3748);
+    color: #ffffff;
+}
+
+/* Títulos */
+.card h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #4a5568;
+    padding-bottom: 10px;
+    color: #63b3ed;
+}
+
+/* Labels */
+label {
+    color: #cbd5e0;
+    font-size: 0.95rem;
+}
+
+/* Inputs */
+input.form-control {
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
+    border-radius: 4px;
+    color: #e2e8f0;
+}
+
+input.form-control:focus {
+    border-color: #63b3ed;
+    box-shadow: 0 0 4px #63b3ed;
+}
+
+/* Botão */
+.btn-info {
+    background-color: #63b3ed;
+    border-color: #63b3ed;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.btn-info:hover {
+    background-color: #4299e1;
+    border-color: #4299e1;
+}
+
+/* Linhas */
+.row.mb-3 {
+    margin-bottom: 15px;
+}
+
+/* Parágrafos */
+.card p {
+    color: #a0aec0;
+    margin-bottom: 10px;
+    font-size: 1rem;
+}

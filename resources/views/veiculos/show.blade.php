@@ -1,12 +1,13 @@
 @extends('layouts.darkMode')
-@if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+
 
 @section('content_header')
     <h1>Informações do veículo</h1>
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
 @stop
 
 @section('content')

@@ -97,25 +97,69 @@
         public function start($id) {
             $solicitar = Solicitar::find($id);
             $veiculo = $solicitar->veiculo;
-            return view('solicitar.start', compact('veiculo','solicitar'))->with('success', 'Solicitação finalizada com sucesso');;
+            return view('solicitar.start', compact('veiculo','solicitar'))->with('success', 'Solicitação iniciada.');
         }
 
-        public function aceitar($id)
-{
-    $solicitar = Solicitar::findOrFail($id);
-    $solicitar->situacao = 'Aceito';
-    $solicitar->save();
+        public function prosseguir(Request $request, $id) {
+            // dd($request->all());
+            $solicitar = Solicitar::find($id);
+            $veiculo = $solicitar->veiculo;
+        
+            $request->validate([
+                'placa_confirmar' => 'required|string',
+                'velocimetro_inicio' => 'required|string',
+            ]);
+            
+            if ($request->input('placa_confirmar') !== $veiculo->placa) {
+                return redirect()->back()->with('error', 'A placa informada não corresponde à placa do veículo.');
+            }
+            
+            $veiculo->placa_confirmar = $request->placa_confirmar;
+            $veiculo->km_atual = $request->velocimetro_inicio;
+            $veiculo->save();
+        
+            return redirect()->route('solicitar.end', ['id' => $solicitar->id]);
+        }
+        
 
-    return redirect()->back()->with('success', 'Solicitação aceita.');
-}
+        public function end(Request $request, $id) {
+            $solicitar = Solicitar::find($id);
+            $veiculo = $solicitar->veiculo;
+        
+            // Validar os dados recebidos
+            $request->validate([
+                'placa_confirmar' => 'required|string',
+                'velocimetro_final' => 'required|string',
+            ]);
+        
+            // Verificar se a placa confirmada corresponde à placa do veículo
+            if ($request->placa_confirmar !== $veiculo->placa) {
+                return redirect()->back()->with('error', 'A placa informada não corresponde à placa do veículo.');
+            }
+        
+            // Atualizar o veículo com os novos dados
+            $veiculo->placa_confirmar = $request->placa_confirmar;
+            $veiculo->km_atual = $request->velocimetro_final;
+            $veiculo->save();
+            return view('solicitar.show', compact('veiculo', 'solicitar'))->with('success', 'Solicitação finalizada com sucesso!');
+        }
 
-public function recusar($id)
-{
-    $solicitar = Solicitar::findOrFail($id);
-    $solicitar->situacao = 'Recusado';
-    $solicitar->save();
+        public function aceitar($id) {
+            $solicitar = Solicitar::findOrFail($id);
+            $solicitar->situacao = 'Aceito';
+            $solicitar->save();
 
-    return redirect()->back()->with('success', 'Solicitação recusada.');
-}
+            return redirect()->back()->with('success', 'Solicitação aceita.');
+        }
+
+        public function recusar($id) {
+            $solicitar = Solicitar::findOrFail($id);
+            $solicitar->situacao = 'Recusado';
+            $solicitar->save();
+
+            return redirect()->back()->with('success', 'Solicitação recusada.');
+        }
+
+
 
     }

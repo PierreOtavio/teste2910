@@ -10,16 +10,19 @@ class Veiculo extends Model
     use HasFactory;
     protected $fillable = [
         'placa',
-        'marca',
-        'modelo',
-        'ano',
-        'cor',
+        'placa_confirmar',
+        'velocimentro_inicio',
+        'velocimetro_final',
         'chassi',
+        'funcionamento',
+        'ano',
+        'modelo',
+        'marca',
+        'cor',
         'capacidade',
         'km_atual',
         'km_revisao',
         'observacao',
-        'funcionamento',
         'qr_code',
     ];
     public function solicitacoes()
