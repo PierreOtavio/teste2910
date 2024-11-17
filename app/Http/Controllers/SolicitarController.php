@@ -101,10 +101,9 @@
         }
 
         public function prosseguir(Request $request, $id) {
-            // dd($request->all());
             $solicitar = Solicitar::find($id);
             $veiculo = $solicitar->veiculo;
-        
+            
             $request->validate([
                 'placa_confirmar' => 'required|string',
                 'velocimetro_inicio' => 'required|string',
@@ -121,24 +120,31 @@
             return redirect()->route('solicitar.end', ['id' => $solicitar->id]);
         }
         
+        public function end($id) {
+            $solicitar = Solicitar::find($id);
+            $veiculo = $solicitar->veiculo;
+            return view('solicitar.end', compact('veiculo','solicitar'))->with('success', 'Solicitação iniciada.');
+        }
 
-        public function end(Request $request, $id) {
+        public function finalizar(Request $request, $id) {
             $solicitar = Solicitar::find($id);
             $veiculo = $solicitar->veiculo;
         
+           
+            
             // Validar os dados recebidos
             $request->validate([
-                'placa_confirmar' => 'required|string',
+                'placa_confirmar2' => 'required|string',
                 'velocimetro_final' => 'required|string',
             ]);
         
             // Verificar se a placa confirmada corresponde à placa do veículo
-            if ($request->placa_confirmar !== $veiculo->placa) {
+            if ($request->placa_confirmar2 !== $veiculo->placa) {
                 return redirect()->back()->with('error', 'A placa informada não corresponde à placa do veículo.');
             }
         
             // Atualizar o veículo com os novos dados
-            $veiculo->placa_confirmar = $request->placa_confirmar;
+            $veiculo->placa_confirmar2 = $request->placa_confirmar2;
             $veiculo->km_atual = $request->velocimetro_final;
             $veiculo->save();
             return view('solicitar.show', compact('veiculo', 'solicitar'))->with('success', 'Solicitação finalizada com sucesso!');

@@ -51,6 +51,11 @@ Route::post('solicitar/prosseguir/{id}', [SolicitarController::class, 'prossegui
 
 
 Route::get('solicitar/end/{id}', [SolicitarController::class, 'end'])->name('solicitar.end');
+
+Route::get('solicitar/finalizar/{id}', [SolicitarController::class, 'finalizar'])->name('solicitar.finalizar');
+
 //Teste de aceitar e recusar:
+
 Route::post('/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])->name('solicitar.aceitar');
+
 Route::post('/solicitar/{id}/recusar', [SolicitarController::class, 'recusar'])->name('solicitar.recusar');

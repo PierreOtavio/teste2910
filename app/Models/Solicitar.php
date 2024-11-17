@@ -16,6 +16,7 @@ class Solicitar extends Model
         'veiculo_id',
         'situacao',
         'user_id',
+        'placa_confirmar'
     ];
     public function veiculo()
     {

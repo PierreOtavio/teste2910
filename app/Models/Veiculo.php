@@ -11,6 +11,7 @@ class Veiculo extends Model
     protected $fillable = [
         'placa',
         'placa_confirmar',
+        'placa_confirmar2',
         'velocimentro_inicio',
         'velocimetro_final',
         'chassi',

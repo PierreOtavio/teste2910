@@ -17,6 +17,7 @@ class CreateVeiculosTable extends Migration
             $table->id();
             $table->string('placa')->unique();
             $table->string('placa_confirmar')->nullable();
+            $table->string('placa_confirmar2')->nullable();
             $table->string('velocimetro_inicio')->nullable();
             $table->string('velocimetro_final')->nullable();
             $table->string('chassi')->unique();
