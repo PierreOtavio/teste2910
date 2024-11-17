@@ -80,55 +80,42 @@
             return redirect()->back()->with('sucess', 'Solicitação aprovada com sucesso');
         }
         
-        /**
-         * Show the form for editing the specified resource.
-         *
-         * @param  \App\Models\Solicitar  $solicitar
-         * @return \Illuminate\Http\Response
-         */
-        public function edit(Solicitar $solicitar)
-        {
-            //
-        }
-
-        /**
-         * Update the specified resource in storage.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @param  \App\Models\Solicitar  $solicitar
-         * @return \Illuminate\Http\Response
-         */
-        public function update(Request $request, $id)
-        {
-            
-        }
-
-        /**
-         * Remove the specified resource from storage.
-         *
-         * @param  \App\Models\Solicitar  $solicitar
-         * @return \Illuminate\Http\Response
-         */
-        public function destroy(Solicitar $solicitar)
-        {
-            //
-        }
-
-        // public function solicitarCarro(Request $request,Solicitar $solicitar) {
-
-        //     $veiculo = Veiculo::findOrFail($id);
-        //     return view('solicitar.create', compact('veiculo'));
-
-        // }
-
         public function ver(Solicitar $solicitar, Veiculo $veiculo,$id) {
             $solicitar = Solicitar::find($id);
-
+            
             // Verifica se a solicitação foi encontrada
-                if (!$solicitar) {
-                    return redirect()->route('solicitacao.index')->with('error', 'Solicitação não encontrada');
-                }
+            if (!$solicitar) {
+                return redirect()->route('solicitar.index')->with('error', 'Solicitação não encontrada');
+            }
+            
+            $solicitar = Solicitar::with('user')->findOrFail($id);
 
             $veiculo = $solicitar->veiculo;
             return view('solicitar.ver',compact('veiculo','solicitar'));
-     }}
+        }
+
+        public function start($id) {
+            $solicitar = Solicitar::find($id);
+            $veiculo = $solicitar->veiculo;
+            return view('solicitar.start', compact('veiculo','solicitar'))->with('success', 'Solicitação finalizada com sucesso');;
+        }
+
+        public function aceitar($id)
+{
+    $solicitar = Solicitar::findOrFail($id);
+    $solicitar->situacao = 'Aceito';
+    $solicitar->save();
+
+    return redirect()->back()->with('success', 'Solicitação aceita.');
+}
+
+public function recusar($id)
+{
+    $solicitar = Solicitar::findOrFail($id);
+    $solicitar->situacao = 'Recusado';
+    $solicitar->save();
+
+    return redirect()->back()->with('success', 'Solicitação recusada.');
+}
+
+    }
