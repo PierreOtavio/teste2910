@@ -27,35 +27,33 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //USUÁRIOS
 Route::resource('teste', UsuarioController::class)->middleware('auth');
 
-Route::get('teste.permissao/{id}', [UsuarioController::class, 'permissao'])->name('teste.permissao');
+Route::get('teste.permissao/{id}', [UsuarioController::class, 'permissao'])->name('teste.permissao')->middleware('auth');
 
 //VEÍCULOS
 Route::resource('veiculos', VeiculoController::class)->middleware('auth');
 
-Route::post('/veiculos/{id}/mudarStatus', [VeiculoController::class, 'mudarStatus'])->name('veiculos.mudarStatus');
+Route::post('/veiculos/{id}/mudarStatus', [VeiculoController::class, 'mudarStatus'])->name('veiculos.mudarStatus')->middleware('auth');
 
 //SOLICITAÇÕES:
-Route::get('solicitar', [VeiculoController::class, 'solicitarIndex'])->name('solicitar.index');
+Route::get('solicitar', [VeiculoController::class, 'solicitarIndex'])->name('solicitar.index')->middleware('auth');
 
-Route::get('solicitar/create/{id}', [VeiculoController::class, 'solicitarCarro'])->name('solicitar.create');
+Route::get('solicitar/create/{id}', [VeiculoController::class, 'solicitarCarro'])->name('solicitar.create')->middleware('auth');
 
-Route::post('solicitar/store', [SolicitarController::class, 'store'])->name('solicitar.store');
+Route::post('solicitar/store', [SolicitarController::class, 'store'])->name('solicitar.store')->middleware('auth');
 
-Route::get('solicitar/{id}', [SolicitarController::class, 'index'])->name('solicitar.show');
+Route::get('solicitar/{id}', [SolicitarController::class, 'index'])->name('solicitar.show')->middleware('auth');
 
-Route::get('solicitar/ver/{id}', [SolicitarController::class, 'ver'])->name('solicitar.ver');
+Route::get('solicitar/ver/{id}', [SolicitarController::class, 'ver'])->name('solicitar.ver')->middleware('auth');
 
-Route::get('solicitar/start/{id}', [SolicitarController::class, 'start'])->name('solicitar.start');
+Route::get('solicitar/start/{id}', [SolicitarController::class, 'start'])->name('solicitar.start')->middleware('auth');
 
-Route::post('solicitar/prosseguir/{id}', [SolicitarController::class, 'prosseguir'])->name('solicitar.prosseguir');
+Route::post('solicitar/prosseguir/{id}', [SolicitarController::class, 'prosseguir'])->name('solicitar.prosseguir')->middleware('auth');
 
 
-Route::get('solicitar/end/{id}', [SolicitarController::class, 'end'])->name('solicitar.end');
+Route::get('solicitar/end/{id}', [SolicitarController::class, 'end'])->name('solicitar.end')->middleware('auth');
 
-Route::get('solicitar/finalizar/{id}', [SolicitarController::class, 'finalizar'])->name('solicitar.finalizar');
+Route::get('solicitar/finalizar/{id}', [SolicitarController::class, 'finalizar'])->name('solicitar.finalizar')->middleware('auth');
 
-//Teste de aceitar e recusar:
+Route::post('/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])->name('solicitar.aceitar')->middleware('auth');
 
-Route::post('/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])->name('solicitar.aceitar');
-
-Route::post('/solicitar/{id}/recusar', [SolicitarController::class, 'recusar'])->name('solicitar.recusar');
+Route::post('/solicitar/{id}/recusar', [SolicitarController::class, 'recusar'])->name('solicitar.recusar')->middleware('auth');

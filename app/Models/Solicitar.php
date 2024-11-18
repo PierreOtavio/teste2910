@@ -10,7 +10,7 @@ class Solicitar extends Model
     use HasFactory;
     protected $fillable = [
         'hora_inicial',
-        // 'hora_final',
+        'hora_final',
         'data_inicial',
         'data_final',
         'veiculo_id',

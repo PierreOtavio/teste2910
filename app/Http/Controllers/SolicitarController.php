@@ -11,20 +11,22 @@
 
     class SolicitarController extends Controller
     {
-        public function index(Request $request, $id = null)
+        public function index()
         {
             $user = Auth::user();
 
-            // Se for responsável, mostrar todas as solicitações
             if ($user->cargo == 0) {
-                $solicitars = Solicitar::with('veiculo')->get();
+                $solicitars = Solicitar::whereNull('hora_final')->with('veiculo')->get();
             } else {
-                // Colaboradores comuns veem apenas suas solicitações
-                $solicitars = Solicitar::where('user_id', $user->id)->with('veiculo')->get();
+                $solicitars = Solicitar::where('user_id', $user->id)
+                    ->whereNull('hora_final')
+                    ->with('veiculo')
+                    ->get();
             }
 
             return view('solicitar.show', compact('solicitars'));
         }
+
 
 
         public function create($veiculo_id) 
@@ -57,33 +59,10 @@
             return redirect()->route('solicitar.index');
         }
         
-
-        public function aprovarOuReprovar($id, Solicitar $solicitar, Veiculo $veiculo, $request) {
-
-            // Busca a solicitação e relaciona com o veículo;
-            $solicitacao = Solicitar::with('veiculo')->findOrFail($id);
-            $veiculo = $solicitacao->veiculo;
-
-            $solicitacao->situacao = $request->situacao;
-            $solicitacao->save();
-
-            if ($request->situacao === 'aprovado') {
-                $veiculo->funcionamento == 1;
-            } else {
-                $veiculo->funcionamento == 0;
-            }
-            $veiculo->save();
-            // dd($veiculo, $solicitacao);
-
-            /* Como não temos ainda uma view de ver solicitações aceitas ou recusadas,
-             eu vou deixar pra voltar pra pagina anterior. */
-            return redirect()->back()->with('sucess', 'Solicitação aprovada com sucesso');
-        }
         
         public function ver(Solicitar $solicitar, Veiculo $veiculo,$id) {
             $solicitar = Solicitar::find($id);
             
-            // Verifica se a solicitação foi encontrada
             if (!$solicitar) {
                 return redirect()->route('solicitar.index')->with('error', 'Solicitação não encontrada');
             }
@@ -126,36 +105,44 @@
             return view('solicitar.end', compact('veiculo','solicitar'))->with('success', 'Solicitação iniciada.');
         }
 
-        public function finalizar(Request $request, $id) {
-            $solicitar = Solicitar::find($id);
-            $veiculo = $solicitar->veiculo;
-        
-           
-            
-            // Validar os dados recebidos
-            $request->validate([
-                'placa_confirmar2' => 'required|string',
-                'velocimetro_final' => 'required|string',
-            ]);
-        
-            // Verificar se a placa confirmada corresponde à placa do veículo
-            if ($request->placa_confirmar2 !== $veiculo->placa) {
-                return redirect()->back()->with('error', 'A placa informada não corresponde à placa do veículo.');
-            }
-        
-            // Atualizar o veículo com os novos dados
-            $veiculo->placa_confirmar2 = $request->placa_confirmar2;
-            $veiculo->km_atual = $request->velocimetro_final;
-            $veiculo->save();
-            return view('solicitar.show', compact('veiculo', 'solicitar'))->with('success', 'Solicitação finalizada com sucesso!');
-        }
+        public function finalizar(Request $request, $id)
+{
+    $solicitar = Solicitar::find($id);
+    $veiculo = $solicitar->veiculo;
+    
+    // Validação dos campos
+    $request->validate([
+        'placa_confirmar2' => 'required|string',
+        'velocimetro_final' => 'required|string',
+    ]);
+    
+    // Verificar se a placa informada é a mesma do veículo
+    if ($request->placa_confirmar2 !== $veiculo->placa) {
+        return redirect()->back()->with('error', 'A placa informada não corresponde à placa do veículo.');
+    }
+    
+    // Atualizar os dados do veículo
+    $veiculo->placa_confirmar2 = $request->placa_confirmar2;
+    $veiculo->km_atual = $request->velocimetro_final;
+    $veiculo->save();
+
+    // Marcar a solicitação como finalizada com a hora atual
+    $solicitar->hora_final = now();
+    $solicitar->situacao = 'Finalizada'; // Alterar o status da solicitação
+    $solicitar->save();
+    
+    return redirect()->route('solicitar.show', $solicitar->veiculo->id)
+                     ->with('success', 'Solicitação finalizada com sucesso!');
+
+                     dd(session('success'));
+}
 
         public function aceitar($id) {
             $solicitar = Solicitar::findOrFail($id);
             $solicitar->situacao = 'Aceito';
             $solicitar->save();
 
-            return redirect()->back()->with('success', 'Solicitação aceita.');
+            return redirect()->route('solicitar.show', $solicitar->veiculo->id )->with('success', 'Solicitação aceita.');
         }
 
         public function recusar($id) {
@@ -163,7 +150,7 @@
             $solicitar->situacao = 'Recusado';
             $solicitar->save();
 
-            return redirect()->back()->with('success', 'Solicitação recusada.');
+            return redirect()->route('solicitar.show', $solicitar->veiculo->id )->with('success', 'Solicitação recusada.');
         }
 
 
