@@ -16,7 +16,7 @@
             
                 <h3>Solicitação do {{ $solicitar->veiculo->marca}} {{ $solicitar->veiculo->modelo}} - Finalizando</h3>
                 <h4><strong>Devolução prevista:</strong> {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }}</h4>
-                <form action="{{ route('solicitar.prosseguir', $solicitar->id) }}" method="POST">
+                <form action="{{ route('solicitar.finalizar', $solicitar->id) }}" method="POST">
                     @csrf
                 <div class="row mb-3">
                     <p><strong>Km marcado no velocímetro:</strong></p>
@@ -43,7 +43,8 @@
 
             </div>
             <div class="card-footer">
-                <a href="{{ route('solicitar.show', $solicitar->veiculo->id) }}" class="btn btn-info">Finalizar</a>
+                <button type="submit" class="btn btn-info">Finalizar</button>
+                {{-- <a href="{{ route('solicitar.finalizar', $solicitar->veiculo->id) }}" class="btn btn-info">Finalizar</a> --}}
             </div>
             </form>
     </div>

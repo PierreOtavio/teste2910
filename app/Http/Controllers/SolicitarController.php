@@ -8,6 +8,8 @@
     use Illuminate\Http\Request;
     use App\Models\User;
     use Illuminate\Support\Facades\Auth;
+    use Carbon\Carbon;
+
 
     class SolicitarController extends Controller
     {
@@ -104,45 +106,38 @@
             $veiculo = $solicitar->veiculo;
             return view('solicitar.end', compact('veiculo','solicitar'))->with('success', 'Solicitação iniciada.');
         }
-
+        
         public function finalizar(Request $request, $id)
-{
-    $solicitar = Solicitar::find($id);
-    $veiculo = $solicitar->veiculo;
-    
-    // Validação dos campos
-    $request->validate([
-        'placa_confirmar2' => 'required|string',
-        'velocimetro_final' => 'required|string',
-    ]);
-    
-    // Verificar se a placa informada é a mesma do veículo
-    if ($request->placa_confirmar2 !== $veiculo->placa) {
-        return redirect()->back()->with('error', 'A placa informada não corresponde à placa do veículo.');
-    }
-    
-    // Atualizar os dados do veículo
-    $veiculo->placa_confirmar2 = $request->placa_confirmar2;
-    $veiculo->km_atual = $request->velocimetro_final;
-    $veiculo->save();
-
-    // Marcar a solicitação como finalizada com a hora atual
-    $solicitar->hora_final = now();
-    $solicitar->situacao = 'Finalizada'; // Alterar o status da solicitação
-    $solicitar->save();
-    
-    return redirect()->route('solicitar.show', $solicitar->veiculo->id)
-                     ->with('success', 'Solicitação finalizada com sucesso!');
-
-                     dd(session('success'));
-}
+        {
+            $solicitar = Solicitar::find($id);
+            $veiculo = $solicitar->veiculo;
+            
+            $request->validate([
+                'placa_confirmar2' => 'required|string',
+                'velocimetro_final' => 'required|string',
+            ]);
+            
+            if ($request->placa_confirmar2 !== $veiculo->placa) {
+                return redirect()->back()->with('error', 'A placa informada não corresponde à placa do veículo.');
+            }
+            
+            $veiculo->placa_confirmar2 = $request->placa_confirmar2;
+            $veiculo->km_atual = $request->velocimetro_final;
+            $veiculo->save();
+            
+            $solicitar->hora_final = Carbon::now();
+            $solicitar->situacao = 'Finalizada'; 
+            $solicitar->save();         
+            return view('solicitar.show', ['id' => $solicitar->veiculo->id, 'success' => 'Solicitação finalizada com sucesso!']);
+              
+        }
 
         public function aceitar($id) {
             $solicitar = Solicitar::findOrFail($id);
             $solicitar->situacao = 'Aceito';
             $solicitar->save();
 
-            return redirect()->route('solicitar.show', $solicitar->veiculo->id )->with('success', 'Solicitação aceita.');
+            return redirect()->route('solicitar.show',  ['id' => $solicitar->veiculo->id] )->with('success', 'Solicitação aceita.');
         }
 
         public function recusar($id) {
