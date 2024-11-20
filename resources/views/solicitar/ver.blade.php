@@ -1,7 +1,7 @@
 @extends('layouts.darkMode')
 
 
-    @if (auth()->user()->cargo ==0)
+    @if (auth()->user()->cargo == 0)
         @section('content_header')
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -34,17 +34,21 @@
                     </ul>
                 </div>
                 <div class="card-footer">
-                    <form action="{{ route('solicitar.aceitar', $solicitar->id) }}" method="POST" style="display: inline-block;">
-                        @csrf
-                        <button type="submit" class="btn btn-success">Aceitar</button>
-                    </form>
+                    @if($solicitar->situacao == 'Pendente')
+                        <form action="{{ route('solicitar.aceitar', $solicitar->id) }}" method="POST" style="display: inline-block;">
+                            @csrf
+                            <button type="submit" class="btn btn-success">Aceitar</button>
+                        </form>
                     
-                    <form action="{{ route('solicitar.recusar', $solicitar->id) }}" method="POST" style="display: inline-block;">
-                        @csrf
-                        <button type="submit" class="btn btn-danger">Recusar</button>
-                    </form>
-                    
-                    
+                        <form action="{{ route('solicitar.recusar', $solicitar->id) }}" method="POST" style="display: inline-block;">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">Recusar</button>
+                        </form>
+                    @else 
+                        <a class="btn btn-secundary" onclick="history.back()">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </a>                   
+                    @endif
                 </div>
             </div>
         </div>
@@ -76,10 +80,17 @@
                         <li><p><strong>Status: </strong>{{$solicitar->situacao}}</p></li>
                     </ul>
                 </div>
-                @if ($solicitar->situacao == 'Aceito')
                 <div class="card-footer">
+                    @if ($solicitar->situacao == 'Aceito')
                         <a class="btn btn-info" href="{{route('solicitar.start', $solicitar->id)}}">Iniciar</a>
-                    @endif
+                        <a class="btn btn-secundary" onclick="history.back()">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </a>
+                @else
+                    <a class="btn btn-secundary" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
+                @endif
                 </div>
         @endsection
     @endif

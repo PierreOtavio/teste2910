@@ -1,9 +1,63 @@
-@extends('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{{ asset('css/custom-login.css') }}">
+        <title>Login</title>
+    </head>
+    <body>
+        <h1 class="login-title"></h1>
+        
+        <form method="POST" action="{{ route('login') }}" class="container">
+            @csrf
+            <section class="input-box" request>
+                <input type="text" name="cpf" placeholder="DIgite o CPF" />
+                <i class="bx bxs-user"></i>
+            </section>
+            
+            <section class="input-box" request>
+                <input type="password" name="password" placeholder="Digite a Senha" />
+                <i class="bx bxs-lock-alt"></i>
+            </section>
+
+            <div class="custom-select-wrapper">
+                <select class="custom-select" id="cargo" name="cargo" required>
+                    <option value="0">Responsável pelo Setor</option>
+                    <option value="1">Colaborador Comum</option>
+                </select>
+            </div>
+            
+            
+            <section class="remember-forgot-box">
+                <div class="remember-me">
+                    <input type="checkbox" name="remember" id="remember" />
+                    <label for="remember" class="form-check-label">
+                        <h5>Remember me</h5>
+                    </label>
+                </div>
+                <a class="forgot-password" href="{{ route('password.request') }}">
+                    <h5>Forgot password?</h5>
+                </a>
+            </section>
+
+            <button class="login-button" type="submit">Login</button>
+            <br>
+            <h5 class="dont-have-an-account">
+                Don't have an account?
+                <a href="{{ route('register') }}"><b>Registre-se</b></a>
+            </h5>
+        </form>
+    </body>
+    </html>
+    
+    
+{{--    @extends('layouts.app')
+    @section('content')
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 
@@ -90,4 +144,4 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection --}}

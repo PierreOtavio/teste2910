@@ -49,8 +49,14 @@
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
                 </form>
+                <a class="btn btn-secundary" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
             @else
                 <a href="{{ route('solicitar.create', $veiculo->id) }}" class="btn btn-info">Solicitar Veículo</a>
+                <a class="btn btn-secundary" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
             @endif
         </div>
     </div>

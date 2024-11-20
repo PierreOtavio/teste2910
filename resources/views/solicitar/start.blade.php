@@ -5,6 +5,11 @@
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
+    @endif
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
 @endif
 
 @stop
@@ -29,7 +34,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <p><strong>Km marcado no velocímetro:</strong></p>
+                        <p><strong>Quilometragem : </strong></p>
                         <div class="col-md-6">
                             <input id="velocimetro_inicio" type="text" class="form-control @error('velocimetro_inicio') is-invalid @enderror" name="velocimetro_inicio" required>
                             @error('velocimetro_inicio')

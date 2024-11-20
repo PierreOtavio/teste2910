@@ -22,14 +22,19 @@
             </div>
             <div class="card-footer">
                 @if (auth()->user()->cargo == 0) 
-                <a href="{{ url('teste/'.$user->id.'/edit') }}" class="btn btn-warning">Editar</a>
-                <form action="{{ url('teste/'.$user->id) }}" method="POST" style="display:inline-block;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
-                </form>
+                    <a href="{{ url('teste/'.$user->id.'/edit') }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ url('teste/'.$user->id) }}" method="POST" style="display:inline-block;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
+                    </form>
+                    <a class="btn btn-secundary" onclick="history.back()">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </a>
                 @else
-                <a href="{{ route('teste.show', $user->id) }}" class="btn btn-info">Ver</a>
+                <a class="btn btn-secundary" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
                 @endif
             </div>
         </div>

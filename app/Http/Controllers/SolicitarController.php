@@ -13,6 +13,21 @@
 
     class SolicitarController extends Controller
     {
+        // private function finalizarSolicitacao(Request $request) {
+
+        //     $user = Auth::user();
+
+        //     if ($user->cargo == 0) {
+        //         $solicitars = Solicitar::whereNull('hora_final')->with('veiculo')->get();
+        //     } else {
+        //         $solicitars = Solicitar::where('user_id', $user->id)
+        //             ->whereNull('hora_final')
+        //             ->with('veiculo')
+        //             ->get();
+        //     }
+        // }
+
+
         public function index()
         {
             $user = Auth::user();
@@ -127,8 +142,22 @@
             
             $solicitar->hora_final = Carbon::now();
             $solicitar->situacao = 'Finalizada'; 
-            $solicitar->save();         
-            return view('solicitar.show', ['id' => $solicitar->veiculo->id, 'success' => 'Solicitação finalizada com sucesso!']);
+            $solicitar->save();  
+            
+            $user = Auth::user();
+
+            if ($user->cargo == 0) {
+                $solicitars = Solicitar::whereNull('hora_final')->with('veiculo')->get();
+            } else {
+                $solicitars = Solicitar::where('user_id', $user->id)
+                    ->whereNull('hora_final')
+                    ->with('veiculo')
+                    ->get();
+            }
+
+            return view('solicitar.show', ['id' => $solicitar->veiculo->id], compact('solicitars'))->with('success', 'Solicitação finalizada com sucesso!');
+
+            // return view('solicitar.show', ['id' => $solicitar->veiculo->id, $solicitars, 'success' => 'Solicitação finalizada com sucesso!']);
               
         }
 

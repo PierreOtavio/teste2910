@@ -1,14 +1,13 @@
 @extends('layouts.darkMode')
 @section('content_header')
-<h1>Permissões do Usuário</h1>
+<h1>Permissões do {{ $user->name }}</h1>
 @stop
 
 @section('content')
 <div class="content">
     <div class="card">
         <div class="card-body">
-            <script>
-            <h3>{{ $user->name }} <h4>Cargo:  @if ($user->cargo == 0)
+            <h4>Cargo:  @if ($user->cargo == 0)
                                             Responsável pelo setor
                                         @endif
                                         @if ($user->cargo == 1)
@@ -18,25 +17,36 @@
                                             Colaborador tercerizado
                                         @endif
                                     </h4>
-                </h3>
-                </script>
             <p><strong>Permissões:</strong></p>
             <ul>
-                <li>@if ($user->cargo == 0)
-                Ver, Criar, Editar e Excluir Usuários
+                @if ($user->cargo == 0)
+                    <li> Ver, Criar, Editar e Excluir Usuários; </li>
+                    <li>Ver, Criar, Editar e Excluir Veículos;</li>
+                    <li>Aceitar e Recusar Solicitações;</li>
                 @endif
                 @if ($user->cargo != 0)
-                Ver usuários
+                Ver usuários;
+                Ver veículos;
+                Solicitar um veículo.
                 @endif </li>
             </ul>
         </div>
         <div class="card-footer">
-            <a href="{{ url('teste/'.$user->id.'/edit') }}" class="btn btn-warning">Editar</a>
-            <form action="{{ url('teste/'.$user->id) }}" method="POST" style="display:inline-block;">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
-            </form>
+            @if (auth()->user()->cargo == 0)
+                <a href="{{ url('teste/'.$user->id.'/edit') }}" class="btn btn-warning">Editar</a>
+                <form action="{{ url('teste/'.$user->id) }}" method="POST" style="display:inline-block;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</button>
+                </form>
+                <a class="btn btn-secundary" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+            @else
+                <a class="btn btn-secundary" onclick="history.back()">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </a>
+            @endif
         </div>
     </div>
 </div>

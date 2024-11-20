@@ -261,3 +261,16 @@ input.form-control:focus {
     margin-bottom: 10px;
     font-size: 1rem;
 }
+
+.dark-mode .btn-secundary {
+    color: #ff3d71;
+    background-color: #2d243c;
+    border-color: #ff3d71;
+    box-shadow: none;
+}
+.dark-mode .btn-secundary:hover {
+    color: #ff3d71;
+    background-color: #2d243c;
+    border-color: #ff3d71;
+    box-shadow: none;
+}
