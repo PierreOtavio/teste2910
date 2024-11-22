@@ -154,3 +154,6 @@
     color: rgba(0, 0, 0, 0.75); /* Cor da seta */
     pointer-events: none; /* Não interfere no clique */
 }
+a {
+  color: #5A6F80; 
+}

@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -34,18 +34,18 @@
                 <div class="remember-me">
                     <input type="checkbox" name="remember" id="remember" />
                     <label for="remember" class="form-check-label">
-                        <h5>Remember me</h5>
+                        <h5>Lembre de mim</h5>
                     </label>
                 </div>
                 <a class="forgot-password" href="{{ route('password.request') }}">
-                    <h5>Forgot password?</h5>
+                    <h5>Esqueceu a senha?</h5>
                 </a>
             </section>
 
             <button class="login-button" type="submit">Login</button>
             <br>
             <h5 class="dont-have-an-account">
-                Don't have an account?
+                Não tem uma conta?
                 <a href="{{ route('register') }}"><b>Registre-se</b></a>
             </h5>
         </form>

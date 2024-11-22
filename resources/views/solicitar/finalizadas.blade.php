@@ -14,7 +14,7 @@
             }
         }, 5000);
     </script> 
-        <h1>Solicitações:</h1>
+        <h1>Solicitações Finalizadas:</h1>
         @endsection
         
         @section('content')
@@ -44,7 +44,7 @@
                     </thead>
                     <tbody>
                         @foreach ($solicitars as $solicitar)
-                            @if ($solicitar->situacao != 'Finalizada')
+                            @if ($solicitar->situacao = 'Finalizada')
                             <tr>
                                 <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
                                 <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
@@ -68,7 +68,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/custom-dark-mode.css') }}">
     
-    <h1>Minhas Solicitações:</h1>
+    <h1>Minhas Solicitações Finalizadas:</h1>
     @endsection
     
     @section('content')
@@ -100,7 +100,7 @@
                     </thead>
                     <tbody>
                         @foreach ($solicitars as $solicitar)
-                            @if ($solicitar->situacao != 'Finalizada')
+                            @if ($solicitar->situacao = 'Finalizada')
                             <tr>
                                 <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
                                 <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>

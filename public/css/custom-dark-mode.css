@@ -155,10 +155,6 @@
     color: crimson;
 }
 
-.botao-cinza {
-    color: #8d8d8d;
-}
-
 /*PARTE DO QR CODE*/
 .info-container {
     display: flex;
@@ -253,6 +249,20 @@ input.form-control:focus {
 /* Linhas */
 .row.mb-3 {
     margin-bottom: 15px;
+}
+
+#direcao {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    left: 19px;
+}
+
+#direcao1 {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    left: 43px;
 }
 
 /* Parágrafos */

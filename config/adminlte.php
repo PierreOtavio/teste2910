@@ -330,6 +330,11 @@ return [
                     'url' => 'solicitar/{id}',
                     'icon' => 'fas fa-calendar',
                 ],
+                [
+                    'text' => 'Solicitações Finalizadas',
+                    'url' => 'solicitar/finalizadas/{id}',
+                    'icon' => 'fas fa-check',
+                ],
             ]
         ]
     ],

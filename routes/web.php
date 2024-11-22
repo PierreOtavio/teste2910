@@ -57,3 +57,5 @@ Route::post('solicitar/finalizar/{id}', [SolicitarController::class, 'finalizar'
 Route::post('/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])->name('solicitar.aceitar')->middleware('auth');
 
 Route::post('/solicitar/{id}/recusar', [SolicitarController::class, 'recusar'])->name('solicitar.recusar')->middleware('auth');
+
+Route::get('solicitar/finalizadas/{id}', [SolicitarController::class, 'finalizadas'])->name('solicitar.finalizadas')->middleware('auth');

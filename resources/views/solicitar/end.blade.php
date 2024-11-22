@@ -24,7 +24,7 @@
                 <form action="{{ route('solicitar.finalizar', $solicitar->id) }}" method="POST">
                     @csrf
                 <div class="row mb-3">
-                    <p><strong>Km marcado no velocímetro:</strong></p>
+                    <p><strong>Km do velocímetro:</strong></p>
                     <div class="col-md-6">
                         <input id="velocimetro_final" type="text" class="form-control @error('velocimetro_final') is-invalid @enderror" name="velocimetro_final" required>
                         @error('velocimetro_final')
@@ -36,7 +36,19 @@
                 </div>
                 <div class="row mb-3">
                     <p><strong>Placa do veículo:</strong></p>
-                    <div class="col-md-6">
+                    <div class="col-md-6" id="direcao">
+                        <input id="placa_confirmar2" type="text" class="form-control @error('placa_confirmar2') is-invalid @enderror" name="placa_confirmar2" required>
+                        @error('placa_confirmar2')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror   
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <p><strong>Observações:</strong></p>
+                    <div class="col-md-6" id="direcao1">
                         <input id="placa_confirmar2" type="text" class="form-control @error('placa_confirmar2') is-invalid @enderror" name="placa_confirmar2" required>
                         @error('placa_confirmar2')
                             <span class="invalid-feedback" role="alert">

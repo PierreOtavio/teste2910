@@ -24,8 +24,8 @@
                     @csrf
                     <div class="row mb-3">
                         <p><strong>Placa do veículo:</strong></p>
-                        <div class="col-md-6">
-                            <input id="placa_confirmar" type="text" class="form-control @error('placa_confirmar') is-invalid @enderror" name="placa_confirmar" required>
+                        <div class="col-md-6" id="direcao">
+                            <input id="placa_confirmar" type="text" class="form-control @error('placa_confirmar') não-é-válido @enderror" name="placa_confirmar" required>
                             @error('placa_confirmar')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -34,9 +34,9 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <p><strong>Quilometragem : </strong></p>
+                        <p><strong>Km do velocímetro: </strong></p>
                         <div class="col-md-6">
-                            <input id="velocimetro_inicio" type="text" class="form-control @error('velocimetro_inicio') is-invalid @enderror" name="velocimetro_inicio" required>
+                            <input id="velocimetro_inicio" type="text" class="form-control @error('velocimetro_inicio') não-é-válido @enderror" name="velocimetro_inicio" required>
                             @error('velocimetro_inicio')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -44,7 +44,6 @@
                             @enderror
                         </div>
                     </div>
-                    
                 </div>
                 
                 <div class="card-footer">
