@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.darkMode')
 
 @section('content')
 <div class="container">

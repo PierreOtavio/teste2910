@@ -13,13 +13,23 @@
         <form method="POST" action="{{ route('login') }}" class="container">
             @csrf
             <section class="input-box" request>
-                <input type="text" name="cpf" placeholder="DIgite o CPF" />
+                <input type="text" name="cpf" placeholder="Digite o CPF" />
                 <i class="bx bxs-user"></i>
+                @error('cpf')
+                        <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                        </span>
+                @enderror
             </section>
             
             <section class="input-box" request>
                 <input type="password" name="password" placeholder="Digite a Senha" />
                 <i class="bx bxs-lock-alt"></i>
+                @error('password')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                @enderror
             </section>
 
             <div class="custom-select-wrapper">
@@ -27,6 +37,11 @@
                     <option value="0">Responsável pelo Setor</option>
                     <option value="1">Colaborador Comum</option>
                 </select>
+                @error('cargo')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                @enderror
             </div>
             
             
@@ -41,6 +56,11 @@
                     <h5>Esqueceu a senha?</h5>
                 </a>
             </section>
+            @error('forgot_password')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                @enderror
 
             <button class="login-button" type="submit">Login</button>
             <br>
@@ -48,6 +68,7 @@
                 Não tem uma conta?
                 <a href="{{ route('register') }}"><b>Registre-se</b></a>
             </h5>
+            
         </form>
     </body>
     </html>
@@ -101,7 +122,6 @@
                                         <option value="" disabled selected>Escolha uma opção</option>
                                         <option value="0">Responsável pelo setor</option>
                                         <option value="1">Colaborador comum</option>
-                                        <option value="2">Colaborador terceirizado</option>
                                     </select>
                                 </div>
                                 @error('cargo')

@@ -262,7 +262,7 @@ input.form-control:focus {
     display: flex;
     flex-direction: row;
     position: relative;
-    left: 43px;
+    left: 43px -1px;
 }
 
 /* Parágrafos */

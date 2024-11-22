@@ -1,6 +1,5 @@
 @extends('adminlte::page')
 @section('css')
-<!-- Inclua o arquivo CSS local -->
 <link rel="stylesheet" href="{{ asset('css/custom-dark-mode.css') }}">
 
 @endsection
@@ -35,8 +34,6 @@
             }
         });
     });
-
-    //Código das mensagens: 
         
 </script>
 @endsection

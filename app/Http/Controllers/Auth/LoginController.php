@@ -51,7 +51,7 @@ class LoginController extends Controller
         $request->validate([
             'cpf' => 'required|string|size:11', // CPF com tamanho 11
             'password' => 'required|string',
-            'cargo' => 'required|in:0,1,2',
+            'cargo' => 'required|in:0,1,',
         ]);
     }
 

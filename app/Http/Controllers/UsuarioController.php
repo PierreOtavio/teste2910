@@ -71,7 +71,7 @@ namespace App\Http\Controllers;
                 'name' => 'required|string|max:255',
                 'email' => 'required|email|max:255',
                 'cpf' => 'required|string|size:11',
-                'cargo' => 'required|in:0,1,2',
+                'cargo' => 'required|in:0,1',
             ]);
 
             $user->update($dadosValidados);
@@ -85,13 +85,4 @@ namespace App\Http\Controllers;
             $user->delete();
             return redirect()->route('teste.index')->with('success', 'Usuário excluído com sucesso!');
         }
-        public function permissao(Request $request, User $user, $id) {
-
-            $user = User::findOrFail($id);
-            return view('teste.permissao', compact('user'));
-            
-        }
-        
-        
-
     }

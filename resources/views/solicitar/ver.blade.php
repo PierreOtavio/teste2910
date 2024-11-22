@@ -45,7 +45,7 @@
                             <button type="submit" class="btn btn-danger">Recusar</button>
                         </form>
                     @else 
-                        <a class="btn btn-secundary" onclick="history.back()">
+                        <a class="btn btn-secondary" onclick="history.back()">
                             <i class="fas fa-arrow-left"></i> Voltar
                         </a>                   
                     @endif
