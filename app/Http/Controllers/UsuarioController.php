@@ -85,4 +85,11 @@ namespace App\Http\Controllers;
             $user->delete();
             return redirect()->route('teste.index')->with('success', 'Usuário excluído com sucesso!');
         }
+
+        public function permissao(Request $request, User $user, $id) {
+
+            $user = User::findOrFail($id);
+            return view('teste.permissao', compact('user'));
+            
+        }
     }

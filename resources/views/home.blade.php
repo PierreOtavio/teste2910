@@ -18,7 +18,7 @@
                         </div>
                     @endif
 
-                    {{ __('Você está logado!') }}
+                    {{ __('Você está logado como') }} {{auth()->user()->cargo == 0 ? 'Responsável pelo Setor' : 'Colaborador Comum' }}
                     <br>
                     {{ __('O que você deseja hoje?') }}
                 </div>

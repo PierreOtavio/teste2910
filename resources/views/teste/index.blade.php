@@ -32,7 +32,9 @@
             <tr>
                 <th>Nome:</th>
                 <th>E-mail:</th>
+                @if (auth()->user()->cargo ==0)
                 <th>CPF:</th>
+                @endif
                 <th>Permissões:</th>
                 <th>Gerenciamento:</th>
             </tr>
@@ -42,21 +44,23 @@
                 <tr>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
+                    @if (auth()->user()->cargo ==0)
                     <td>{{ $user->cpf }}</td>
+                    @endif
                     <td>
                         <a href="{{ route('teste.permissao', $user->id) }}"> <i class="fas fa-user"></i> </a>
                     </td>
                     <td>
                         @if (auth()->user()->cargo == 0) 
-                            <a href="{{ route('teste.show', $user->id) }}" class="btn btn-info btn-sm">Ver</a>
-                            <a href="{{ route('teste.edit', $user->id) }}" class="btn btn-info btn-sm">Editar</a>
+                            <a href="{{ route('teste.show', $user->id) }}" class="btn btn-info">Ver</a>
+                            <a href="{{ route('teste.edit', $user->id) }}" class="btn btn-info">Editar</a>
                             <form action="{{ route('teste.destroy', $user->id) }}" method="POST" style="display: inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Certeza que deseja excluir?')">Excluir</button>
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Certeza que deseja excluir?')">Excluir</button>
                             </form>
                         @else
-                            <a href="{{ route('teste.show', $user->id) }}" class="btn btn-info btn-sm">Ver</a>
+                            <a href="{{ route('teste.show', $user->id) }}" class="btn btn-info">Ver</a>
                         @endif
                     </td>
                 </tr>

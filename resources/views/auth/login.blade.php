@@ -32,17 +32,6 @@
                 @enderror
             </section>
 
-            <div class="custom-select-wrapper">
-                <select class="custom-select" id="cargo" name="cargo" required>
-                    <option value="0">Responsável pelo Setor</option>
-                    <option value="1">Colaborador Comum</option>
-                </select>
-                @error('cargo')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                @enderror
-            </div>
             
             
             <section class="remember-forgot-box">

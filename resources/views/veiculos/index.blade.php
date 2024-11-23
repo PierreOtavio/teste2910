@@ -100,8 +100,8 @@
                             </label>
                             </td>
                             <td>
-                            <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
-                            <a href="{{ route('veiculos.edit', $veiculo->id) }}" class="btn btn-info btn-sm">Editar</a>
+                            <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info">Ver</a>
+                            <a href="{{ route('veiculos.edit', $veiculo->id) }}" class="btn btn-info">Editar</a>
                             <form action="{{ route('veiculos.destroy', $veiculo->id) }}" method="POST" style="display: inline-block">
                                 @csrf
                                 @method('DELETE')
@@ -119,7 +119,7 @@
                             </div>
                         @endif
                     <td>
-                        <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info btn-sm">Ver</a>
+                        <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info">Ver</a>
                     </td>
 
                     @endif

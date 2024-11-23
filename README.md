@@ -11,7 +11,7 @@ Passo 3: Banco de Dados
 Deve criar o banco de dados em seu computador por meio de duas formas:
 1 - MYSQL workbench
 2 - comandos cmd :
-2.1 - mysql -u [usuário] -p (o usuário usamos root e o -p é somente se precisar de senha para acessar a conexão MYSQL)
+2.1 - mysql -u [usuário] -p (o usuário usamos root e o '-p' é somente se precisar de senha para acessar a conexão MYSQL)
 2.2 - CREATE DATABASE [nome] (comando para criar o database);
 
 Passo 4: Extensões
