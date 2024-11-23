@@ -21,6 +21,7 @@ class CreateSolicitarsTable extends Migration
             $table->date('data_final');
             $table->text('motivo')->default('Não explicado');
             $table->string('situacao')->default('Pendente');
+            $table->mediumText('obs_user')->default('não há observações');
 
             $table->unsignedBigInteger('veiculo_id');
             $table->foreign('veiculo_id')->references('id')->on('veiculos');

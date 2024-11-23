@@ -116,6 +116,7 @@
             $request->validate([
                 'placa_confirmar2' => 'required|string',
                 'velocimetro_final' => 'required|string',
+                'observacoes' => 'required|text',
             ]);
             
             if ($request->placa_confirmar2 !== $veiculo->placa) {
@@ -127,9 +128,11 @@
             $veiculo->save();
             
             $solicitar->hora_final = Carbon::now();
-            $solicitar->situacao = 'Finalizada'; 
+            $solicitar->situacao = 'Finalizada';
+            $solicitar->observacoes = $request->input('observacoes'); 
             $solicitar->save();  
             
+            // dd($request->all());
             $user = Auth::user();
 
             if ($user->cargo == 0) {

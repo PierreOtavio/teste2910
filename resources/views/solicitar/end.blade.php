@@ -49,8 +49,8 @@
                 <div class="row mb-3">
                     <p><strong>Observações:</strong></p>
                     <div class="col-md-6" id="direcao1">
-                        <input id="placa_confirmar2" type="text" class="form-control @error('placa_confirmar2') is-invalid @enderror" name="placa_confirmar2" required>
-                        @error('placa_confirmar2')
+                        <input id="oservacoes" type="text" class="form-control @error('oservacoes') is-invalid @enderror" name="observacoes" required>
+                        @error('observacoes')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
