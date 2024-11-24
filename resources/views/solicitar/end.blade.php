@@ -49,8 +49,8 @@
                 <div class="row mb-3">
                     <p><strong>Observações:</strong></p>
                     <div class="col-md-6" id="direcao1">
-                        <input id="oservacoes" type="text" class="form-control @error('oservacoes') is-invalid @enderror" name="observacoes" required>
-                        @error('observacoes')
+                        <input id="obs_user" type="text" class="form-control @error('obs_user') is-invalid @enderror" name="obs_user" required>
+                        @error('obs_user')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>

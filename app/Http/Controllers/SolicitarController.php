@@ -73,7 +73,7 @@
             $solicitar = Solicitar::with('user')->findOrFail($id);
 
             $veiculo = $solicitar->veiculo;
-            return view('solicitar.ver',compact('veiculo','solicitar'));
+            return view('solicitar.ver', compact('veiculo','solicitar'));
         }
 
         public function start($id) {
@@ -116,7 +116,7 @@
             $request->validate([
                 'placa_confirmar2' => 'required|string',
                 'velocimetro_final' => 'required|string',
-                'observacoes' => 'required|text',
+                'obs_user' => 'required|string',
             ]);
             
             if ($request->placa_confirmar2 !== $veiculo->placa) {
@@ -129,7 +129,7 @@
             
             $solicitar->hora_final = Carbon::now();
             $solicitar->situacao = 'Finalizada';
-            $solicitar->observacoes = $request->input('observacoes'); 
+            $solicitar->obs_user = $request->input('obs_user');
             $solicitar->save();  
             
             // dd($request->all());
@@ -152,6 +152,7 @@
             $solicitar->situacao = 'Aceito';
             $solicitar->save();
 
+            // dd($solicitar->situacao);
             return redirect()->route('solicitar.show',  ['id' => $solicitar->veiculo->id] )->with('success', 'Solicitação aceita.');
         }
 
