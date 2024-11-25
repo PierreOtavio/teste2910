@@ -130,7 +130,9 @@
             $solicitar->hora_final = Carbon::now();
             $solicitar->situacao = 'Finalizada';
             $solicitar->obs_user = $request->input('obs_user');
-            $solicitar->save();  
+            $solicitar->save();
+
+            
             
             // dd($request->all());
             $user = Auth::user();
@@ -152,6 +154,14 @@
             $solicitar->situacao = 'Aceito';
             $solicitar->save();
 
+            $veiculo = Veiculo::findOrFail($id);
+            if ($solicitar->situacao == 'Aceito') {
+                $veiculo->funcionamento = 1;
+                $veiculo->update();
+            } else {
+                $veiculo->save();
+            }
+
             // dd($solicitar->situacao);
             return redirect()->route('solicitar.show',  ['id' => $solicitar->veiculo->id] )->with('success', 'Solicitação aceita.');
         }
@@ -160,6 +170,14 @@
             $solicitar = Solicitar::findOrFail($id);
             $solicitar->situacao = 'Recusado';
             $solicitar->save();
+
+            $veiculo = Veiculo::findOrFail($id);
+            if ($solicitar->situacao == 'Aceito') {
+                $veiculo->funcionamento = 1;
+                $veiculo->update();
+            } else {
+                $veiculo->save();
+            }
 
             return redirect()->route('solicitar.show', $solicitar->veiculo->id )->with('danger', 'Solicitação recusada.');
         }
