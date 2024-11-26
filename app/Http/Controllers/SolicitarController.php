@@ -9,6 +9,7 @@
     use App\Models\User;
     use Illuminate\Support\Facades\Auth;
     use Carbon\Carbon;
+    use Mpdf\Mpdf;
 
 
     class SolicitarController extends Controller
@@ -125,11 +126,13 @@
             
             $veiculo->placa_confirmar2 = $request->placa_confirmar2;
             $veiculo->km_atual = $request->velocimetro_final;
+            $veiculo->funcionamento = 0;
             $veiculo->save();
             
             $solicitar->hora_final = Carbon::now();
             $solicitar->situacao = 'Finalizada';
             $solicitar->obs_user = $request->input('obs_user');
+
             $solicitar->save();
 
             
@@ -172,8 +175,8 @@
             $solicitar->save();
 
             $veiculo = Veiculo::findOrFail($id);
-            if ($solicitar->situacao == 'Aceito') {
-                $veiculo->funcionamento = 1;
+            if ($solicitar->situacao == 'Recusado') {
+                $veiculo->funcionamento = 0;
                 $veiculo->update();
             } else {
                 $veiculo->save();
@@ -185,7 +188,8 @@
         public function finalizadas() {
             $user = Auth::user();
 
-            if ($user->cargo == 0) {
+            // dd($solicitars);
+            if (auth()->user()->cargo == 0) {
                 $solicitars = Solicitar::where('hora_final')->with('veiculo')->get();
             } else {
                 $solicitars = Solicitar::where('user_id', $user->id)
@@ -197,4 +201,41 @@
             return view('solicitar.finalizadas', compact('solicitars'));
         }
 
-    }
+        public function gerarPDF($id) {
+            $solicitar = Solicitar::findOrFail($id);
+            $veiculo = Veiculo::findOrFail($id);
+            $user = User::findOrFail($id);
+            if ($solicitar) {
+        // Obtém a placa do veículo
+            $hora_inicial = $solicitar->placa;
+
+        // Busca a solicitação associada ao veículo (caso exista)
+            $solicitar = Solicitar::where('veiculo_id', $id)->first();
+
+        // Obtém a hora inicial, caso exista
+            $hora_inicial = $solicitar ? $solicitar->hora_inicial : 'N/A';
+
+            $data1 = \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/y');
+            $data2 = \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/y');
+            $hora1 = \Carbon\Carbon::parse($solicitar->hora_inicio)->format('h:i A');
+            $hora2 = \Carbon\Carbon::parse($solicitar->hora_final)->format('h:i A');
+            $km = 
+
+            $mpdf = new Mpdf();
+            $html = '<h1>Relatório do Veículo</h1>';
+            $html .= "<p>Colaborador:  $user->name  </p>";
+            $html .= "<p>ID:  $user->id  </p>";
+            $html .= "<p>Telefone:    </p>";
+            $html .= "<p>Email:  $user->email  </p>";
+            $html .= "<p>Veículo:  $veiculo->marca $veiculo->modelo </p>";
+            $html .= "<p>Placa: $veiculo->placa </p>";
+            $html .= "<p>O.S.:  $solicitar->id  </p>";
+            $html .= "<p>Data:  $data1 - $data2  </p>";
+            $html .= "<p>Hora:  $hora1 - $hora2  </p>";
+            $html .= "<p>Km:  $km  </p>";
+            $mpdf->WriteHTML($html);
+
+            return response($mpdf->Output(), 200)->header('Content-Type', 'application/pdf');
+            }
+        }
+}

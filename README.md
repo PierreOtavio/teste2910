@@ -28,7 +28,8 @@ DB_USERNAME=root
 DB_PASSWORD= (colocar a senha caso seu acesso ao mysql necessite de senha)
 4 - php artisan migrate
 5 - composer require simplesoftwareio/simple-qrcode
-6 - php artisan serve (irá abrir a página web)
+6 - composer require mpdf/mpdf
+7 - php artisan serve (irá abrir a página web)
 
 Passo 5: Fazer o Register
 No canto superior direito irá aparecer duas opções: login e register, por ser a primeira vez, faça o register e pronto, já tem o acesso às views.

@@ -49,7 +49,6 @@ Route::get('solicitar/start/{id}', [SolicitarController::class, 'start'])->name(
 
 Route::post('solicitar/prosseguir/{id}', [SolicitarController::class, 'prosseguir'])->name('solicitar.prosseguir')->middleware('auth');
 
-
 Route::get('solicitar/end/{id}', [SolicitarController::class, 'end'])->name('solicitar.end')->middleware('auth');
 
 Route::post('solicitar/finalizar/{id}', [SolicitarController::class, 'finalizar'])->name('solicitar.finalizar')->middleware('auth');
@@ -59,3 +58,5 @@ Route::post('/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])-
 Route::post('/solicitar/{id}/recusar', [SolicitarController::class, 'recusar'])->name('solicitar.recusar')->middleware('auth');
 
 Route::get('solicitar/finalizadas/{id}', [SolicitarController::class, 'finalizadas'])->name('solicitar.finalizadas')->middleware('auth');
+
+Route::get('/gerar-pdf/{id}', [SolicitarController::class, 'gerarPDF'])->name('gerar.pdf')->middleware('auth');
