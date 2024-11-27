@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Http\Controllers\VeiculoController;
+use App\Models\Veiculo;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class VeiculoFactory extends Factory
@@ -24,6 +27,21 @@ class VeiculoFactory extends Factory
         'km_atual' => $this->faker->numberBetween(0, 300000),
         'observacao' => $this->faker->paragraph(),
         ];
+        $veiculo->fill($data);
+        $veiculo->save();
+
+        $this->seedQRCode($veiculo);
+
+        return $data;
     }
 
+    public function seedQRCode(Veiculo $veiculo) {
+        // Gerar QR Code com o ID do veículo
+        $qrCode = QrCode::generate($veiculo->id);  // Use o ID do veículo aqui
+        $fileName = time() . '.svg'; // Nome único para o arquivo
+        file_put_contents(public_path('qrcodes/' . $fileName), $qrCode);
+    
+        // Atualizar o veículo com o caminho do QR Code
+        $veiculo->update(['qr_code' => $fileName]);
+    }
 }

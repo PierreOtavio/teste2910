@@ -115,7 +115,7 @@
                         </div>
 
                         <div class="mb-3 row">
-                            <label for="cargo" class="col-md-4 col-form-label text-md-end">Centro de Custo</label>
+                            <label for="cargo" class="col-md-4 col-form-label text-md-end">{{ __('Centro de Custo') }}</label>
                             <div class="col-md-6">
                                 <div class="custom-select-wrapper">
                                     <select class="bustom-select" id="cargo" name="cargo" request>
@@ -139,7 +139,7 @@
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
+                                        {{ __('Lembre-se de mim') }}
                                     </label>
                                 </div>
                             </div>
@@ -153,7 +153,7 @@
                                 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
+                                        {{ __('Esqueceu sua senha?') }}
                                     </a>
                                 @endif
                             </div>
