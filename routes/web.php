@@ -53,10 +53,12 @@ Route::get('solicitar/end/{id}', [SolicitarController::class, 'end'])->name('sol
 
 Route::post('solicitar/finalizar/{id}', [SolicitarController::class, 'finalizar'])->name('solicitar.finalizar')->middleware('auth');
 
-Route::post('/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])->name('solicitar.aceitar')->middleware('auth');
+Route::match(['get', 'post'],'/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])->name('solicitar.aceitar')->middleware('auth');
 
 Route::post('/solicitar/{id}/recusar', [SolicitarController::class, 'recusar'])->name('solicitar.recusar')->middleware('auth');
 
 Route::get('solicitar/finalizadas/{id}', [SolicitarController::class, 'finalizadas'])->name('solicitar.finalizadas')->middleware('auth');
 
 Route::get('/gerar-pdf/{id}', [SolicitarController::class, 'gerarPDF'])->name('gerar.pdf')->middleware('auth');
+
+Route::get('/exportar-excel/{id}', [SolicitarController::class, 'exportarExcel'])->name('exportar.excel')->middleware('auth');

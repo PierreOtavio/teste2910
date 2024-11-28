@@ -10,6 +10,8 @@
     use Illuminate\Support\Facades\Auth;
     use Carbon\Carbon;
     use Mpdf\Mpdf;
+    use PhpOffice\PhpSpreadsheet\Spreadsheet;
+    use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
     class SolicitarController extends Controller
@@ -85,6 +87,7 @@
 
         public function prosseguir(Request $request, $id) {
             $solicitar = Solicitar::find($id);
+            $veiculo = Veiculo::find($id);
             $veiculo = $solicitar->veiculo;
             
             $request->validate([
@@ -97,18 +100,22 @@
             }
             
             $veiculo->placa_confirmar = $request->placa_confirmar;
+            $veiculo->velocimetro_inicio = $request->velocimetro_inicio;
             $veiculo->km_atual = $request->velocimetro_inicio;
             $veiculo->save();
         
-            return redirect()->route('solicitar.end', ['id' => $solicitar->id]);
+            return redirect()->route('solicitar.end', ['id' => $solicitar->id])->with('success', 'Solicitação iniciada.');
         }
         
-        public function end($id) {
+
+        public function end($id, Request $request) {
             $solicitar = Solicitar::find($id);
             $veiculo = $solicitar->veiculo;
+
             return view('solicitar.end', compact('veiculo','solicitar'))->with('success', 'Solicitação iniciada.');
         }
         
+
         public function finalizar(Request $request, $id)
         {
             $solicitar = Solicitar::find($id);
@@ -120,11 +127,17 @@
                 'obs_user' => 'required|string',
             ]);
             
+            
             if ($request->placa_confirmar2 !== $veiculo->placa) {
                 return redirect()->back()->with('error', 'A placa informada não corresponde à placa do veículo.');
             }
+
+            if ($request->input('velocimetro_inicio') > ('velocimetro_final')) {
+                return redirect()->back()->with('error', 'A quilometragem final não pode ser menor que a inicial.');
+            }
             
             $veiculo->placa_confirmar2 = $request->placa_confirmar2;
+            $veiculo->velocimetro_final = $request->velocimetro_final;
             $veiculo->km_atual = $request->velocimetro_final;
             $veiculo->funcionamento = 0;
             $veiculo->save();
@@ -132,12 +145,8 @@
             $solicitar->hora_final = Carbon::now();
             $solicitar->situacao = 'Finalizada';
             $solicitar->obs_user = $request->input('obs_user');
-
             $solicitar->save();
 
-            
-            
-            // dd($request->all());
             $user = Auth::user();
 
             if ($user->cargo == 0) {
@@ -149,7 +158,8 @@
                     ->get();
             }
 
-            return redirect()->route('solicitar.show', ['id' => $solicitar->veiculo->id] )->with('success', 'Solicitação finalizada com sucesso!');
+            return redirect()->route('solicitar.show', ['id' => $solicitar->veiculo->id])->with('success', 'Solicitação finalizada com sucesso!');
+
         }
 
         public function aceitar($id) {
@@ -157,16 +167,7 @@
             $solicitar->situacao = 'Aceito';
             $solicitar->save();
 
-            $veiculo = Veiculo::findOrFail($id);
-            if ($solicitar->situacao == 'Aceito') {
-                $veiculo->funcionamento = 1;
-                $veiculo->update();
-            } else {
-                $veiculo->save();
-            }
-
-            // dd($solicitar->situacao);
-            return redirect()->route('solicitar.show',  ['id' => $solicitar->veiculo->id] )->with('success', 'Solicitação aceita.');
+            return redirect()->route('solicitar.show',  ['id' => $solicitar->id])->with('success', 'Solicitação aceita.');
         }
 
         public function recusar($id) {
@@ -175,25 +176,19 @@
             $solicitar->save();
 
             $veiculo = Veiculo::findOrFail($id);
-            if ($solicitar->situacao == 'Recusado') {
-                $veiculo->funcionamento = 0;
-                $veiculo->update();
-            } else {
-                $veiculo->save();
-            }
 
             return redirect()->route('solicitar.show', $solicitar->veiculo->id )->with('danger', 'Solicitação recusada.');
         }
 
         public function finalizadas() {
             $user = Auth::user();
+            $solicitars = Solicitar::where('situacao', 'Finalizada')->get();
 
-            // dd($solicitars);
             if (auth()->user()->cargo == 0) {
-                $solicitars = Solicitar::where('hora_final')->with('veiculo')->get();
+                $solicitars = Solicitar::where('situacao')->with('veiculo')->get();
             } else {
                 $solicitars = Solicitar::where('user_id', $user->id)
-                    ->where('hora_final')
+                    ->where('situacao', 'Finalizada')
                     ->with('veiculo')
                     ->get();
             }
@@ -219,11 +214,12 @@
             $data2 = \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/y');
             $hora1 = \Carbon\Carbon::parse($solicitar->hora_inicio)->format('h:i A');
             $hora2 = \Carbon\Carbon::parse($solicitar->hora_final)->format('h:i A');
-            $km = 
+            $km = $veiculo->velocimetro_final - $veiculo->velocimetro_inicio;
+            $namec = $solicitar->user->name;
 
             $mpdf = new Mpdf();
             $html = '<h1>Relatório do Veículo</h1>';
-            $html .= "<p>Colaborador:  $user->name  </p>";
+            $html .= "<p>Colaborador:  $namec </p>";
             $html .= "<p>ID:  $user->id  </p>";
             $html .= "<p>Telefone:    </p>";
             $html .= "<p>Email:  $user->email  </p>";
@@ -232,10 +228,121 @@
             $html .= "<p>O.S.:  $solicitar->id  </p>";
             $html .= "<p>Data:  $data1 - $data2  </p>";
             $html .= "<p>Hora:  $hora1 - $hora2  </p>";
-            $html .= "<p>Km:  $km  </p>";
+            $html .= "<p>Km:  $km </p>";
             $mpdf->WriteHTML($html);
 
             return response($mpdf->Output(), 200)->header('Content-Type', 'application/pdf');
             }
         }
-}
+
+        public function exportarExcel($id)
+        {
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+
+            $solicitar = Solicitar::findOrFail($id);
+            $veiculo = Veiculo::findOrFail($id);
+            $user = User::findOrFail($id);
+            if ($solicitar) {
+        // Obtém a placa do veículo
+            $hora_inicial = $solicitar->placa;
+           
+
+        // Busca a solicitação associada ao veículo (caso exista)
+            $solicitar = Solicitar::where('veiculo_id', $id)->first();
+
+        // Obtém a hora inicial, caso exista
+            $hora_inicial = $solicitar ? $solicitar->hora_inicial : 'N/A';
+
+            $namec = $solicitar->user->name;
+            $data1 = \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/y');
+            $data2 = \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/y');
+            $hora1 = \Carbon\Carbon::parse($solicitar->hora_inicio)->format('h:i A');
+            $hora2 = \Carbon\Carbon::parse($solicitar->hora_final)->format('h:i A');
+
+    // Adicionar dados
+            $sheet->setCellValue('B2', 'Colaborador:');
+            $sheet->setCellValue('B3', $namec);
+            $sheet->setCellValue('C2', 'ID:');
+            $sheet->setCellValue('C3',$user->id);
+            $sheet->setCellValue('D2', 'Telefone:');
+            $sheet->setCellValue('D3', 1);
+            $sheet->setCellValue('E2', 'Email');
+            $sheet->setCellValue('E3', $user->email);
+            $sheet->setCellValue('F2', 'Veículo:');
+            $sheet->setCellValue('F3', $veiculo->marca, $veiculo->modelo);
+            $sheet->setCellValue('G2', 'Placa:');
+            $sheet->setCellValue('G3', $veiculo->placa);
+            $sheet->setCellValue('H2', 'O.S.:');
+            $sheet->setCellValue('H3', $solicitar->id);
+            $sheet->setCellValue('I2', 'Data:');
+            $sheet->setCellValue('I3', $data1, $data2);
+            $sheet->setCellValue('J2', 'Hora Inicial:');
+            $sheet->setCellValue('J3', $hora1);
+            $sheet->setCellValue('K2', 'Hora Final:');
+            $sheet->setCellValue('K3', $hora2);
+            $sheet->setCellValue('L2', 'Km:');
+            $sheet->setCellValue('L3',1);
+
+            // Aplicar estilo ao cabeçalho
+            $sheet->getStyle('B2:L2')->applyFromArray([
+                'font' => [
+                'bold' => true,
+                'size' => 12,
+                'color' => ['argb' => 'FFFFFF'], //cor do texto
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'startColor' => ['argb' => '4CAF50'], //cor d fundo
+            ],
+        ]);
+
+                //ajusta a largura das colunas
+                foreach (range('B', 'L') as $col) {
+                 $sheet->getColumnDimension($col)->setWidth(20);
+                }
+
+                    // Ajustar a altura
+                $sheet->getRowDimension('2')->setRowHeight(25);
+                $sheet->getRowDimension('3')->setRowHeight(20);
+
+                //bordas normais
+                $sheet->getStyle('B2:L3')->applyFromArray([
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN, // Borda fina
+                            'color' => ['argb' => '000000'], // Cor preta
+                    ],
+                 ],
+            ]);
+
+                //borda superior espessa
+                $sheet->getStyle('B2:L2')->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK, // Borda espessa
+                                'color' => ['argb' => '000000'], // Cor da borda: preta
+                        ],
+                    ],
+                ]);
+
+                        //alinhamento
+                        $sheet->getStyle('B2:L3')->applyFromArray([
+                            'alignment' => [
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    ],
+                    ]);
+
+
+                    // Baixar o arquivo
+             $writer = new Xlsx($spreadsheet);
+             $filename = 'relatorio.xlsx';
+
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+             header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+                $writer->save('php://output');
+            }
+        }
+    }
