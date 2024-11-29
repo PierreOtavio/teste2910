@@ -201,8 +201,7 @@
             // Buscar a solicitação pelo ID
             // Dados relacionados
             $user = auth()->user();// Usuário associado
-            $solicitar = 
-            Solicitar::where('user_id', $user)->get();
+            $solicitar = Solicitar::where('user_id', $user)->get();
             dd($solicitar);
             // with(['user', 'veiculo'])->where('user_id', $user)->get();
             $veiculo = $solicitar->veiculo; // Veículo associado
