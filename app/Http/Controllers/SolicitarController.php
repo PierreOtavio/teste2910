@@ -197,41 +197,70 @@
         }
 
         public function gerarPDF($id)
-        {
-            // Buscar a solicitação pelo ID
-            // Dados relacionados
-            $user = auth()->user();// Usuário associado
-            $solicitar = Solicitar::where('user_id', $user)->get();
-            dd($solicitar);
-            // with(['user', 'veiculo'])->where('user_id', $user)->get();
-            $veiculo = $solicitar->veiculo; // Veículo associado
-            
-            // Dados necessários
-            dd($solicitar);
-            $hora_inicial = $solicitar->hora_inicial;
-            $data1 = \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/y');
-            $data2 = \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/y');
-            $hora1 = \Carbon\Carbon::parse($solicitar->hora_inicio)->format('h:i A');
-            $hora2 = \Carbon\Carbon::parse($solicitar->hora_final)->format('h:i A');
-            $km = $veiculo->velocimetro_final - $veiculo->velocimetro_inicio;
-            $namec = Solicitar::where('user_id', $user)->with('user')->get();
+         {
 
+            
+            $solicitar = Solicitar::with('veiculo', 'user')->findOrFail($id);
+            
+            
+            
+            $user = auth()->user(); // Captura o usuário logado
+        
+            
             // Gerar o PDF
             $mpdf = new Mpdf();
-            $html = "<h1>Relatório de Uso do Veículo <p>O.S.: $solicitar->id </p></h1>";
-            $html .= "<p>Colaborador: $user->name </p>";
-            $html .= "<p>ID: $user->id </p>";
-            $html .= "<p>Email: $user->email </p>";
-            $html .= "<p>Veículo: $veiculo->marca $veiculo->modelo </p>";
-            $html .= "<p>Placa: $veiculo->placa </p>";
-            $html .= "<p>Data: $data1 - $data2 </p>";
-            $html .= "<p>Hora: $hora1 - $hora2 </p>";
-            $html .= "<p>Km: $km </p>";
-            $html .= "<p>Observações feita pelo colaborador: $solicitar->obs_user </p>";
-
+            $html = "<h1>Relatório de Uso do Veículo</h1>";
+            $html .= "<p>Colaborador: {$user->name}</p>";
+            $html .= "<p>ID: {$user->id}</p>";
+            $html .= "<p>Email: {$user->email}</p>";
+            
+            // Dados da solicitação
+            $veiculo = $solicitar->veiculo;
+            $html .= "<h2>Solicitação ID: {$solicitar->id}</h2>";
+            $html .= "<p>Veículo: {$veiculo->marca} {$veiculo->modelo}</p>";
+            $html .= "<p>Placa: {$veiculo->placa}</p>";
+            $html .= "<p>Data Inicial: {$solicitar->data_inicial}</p>";
+            $html .= "<p>Data Final: {$solicitar->data_final}</p>";
+            $html .= "<p>Quilometragem Inicial: {$solicitar->velocimetro_inicio}</p>";
+            $html .= "<p>Quilometragem Final: {$solicitar->velocimetro_final}</p>";
+            $html .= "<p>Observações: {$solicitar->obs_user}</p>";
+        
             $mpdf->WriteHTML($html);
-
+    
             return response($mpdf->Output(), 200)->header('Content-Type', 'application/pdf');
+           
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //     // Buscar a solicitação pelo ID
+        //     // Dados relacionados
+        //     $user = auth()->user();// Usuário associado
+        //     $solicitar = Solicitar::where('user_id', $user)->get();
+        //     dd($solicitar);
+        //     // with(['user', 'veiculo'])->where('user_id', $user)->get();
+        //     $veiculo = $solicitar->veiculo; // Veículo associado
+            
+        //     // Dados necessários
+        //     dd($solicitar);
+        //     $hora_inicial = $solicitar->hora_inicial;
+        //     $data1 = \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/y');
+        //     $data2 = \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/y');
+        //     $hora1 = \Carbon\Carbon::parse($solicitar->hora_inicio)->format('h:i A');
+        //     $hora2 = \Carbon\Carbon::parse($solicitar->hora_final)->format('h:i A');
+        //     $km = $veiculo->velocimetro_final - $veiculo->velocimetro_inicio;
+        //     $namec = Solicitar::where('user_id', $user)->with('user')->get();
+
         }
 
         

@@ -10,6 +10,11 @@
         <button type="submit" class="btn btn-novo">Buscar</button>
     </form>
 
+    @if(session('error'))
+        <div class="alert alert-danger" id="message" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
     <script>   
         setTimeout(() => {
             const successMessage = document.getElementById("message");

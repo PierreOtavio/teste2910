@@ -17,7 +17,7 @@ class UsuarioFactory extends Factory
             'name' => $this->faker->name(),
             'email' => $this->faker->email(),
             'cpf' => $this->geradorCpf(),
-            'cargo' => $this->faker->randomElement(['Responsável pelo setor', 'Colaborador comum', 'Colaborador terceirizado']),
+            'cargo' => $this->faker->randomElement([0 , 1]),
         ];
     }
 
