@@ -196,25 +196,31 @@
             return view('solicitar.finalizadas', compact('solicitars'));
         }
 
-        public function gerarPDF($id)
-         {
+        public function gerarPDF()
+        {
+        // Captura o usuário logado
+        $user = auth()->user();
 
-            
-            $solicitar = Solicitar::with('veiculo', 'user')->findOrFail($id);
-            
-            
-            
-            $user = auth()->user(); // Captura o usuário logado
-        
-            
-            // Gerar o PDF
-            $mpdf = new Mpdf();
-            $html = "<h1>Relatório de Uso do Veículo</h1>";
-            $html .= "<p>Colaborador: {$user->name}</p>";
-            $html .= "<p>ID: {$user->id}</p>";
-            $html .= "<p>Email: {$user->email}</p>";
-            
-            // Dados da solicitação
+        // Buscar todas as solicitações finalizadas do usuário
+        $solicitacoes = Solicitar::with('veiculo')
+            ->where('user_id', $user->id)
+            ->where('situacao', 'Finalizada')
+            ->get();
+
+        // Verifica se há solicitações para gerar o PDF
+        if ($solicitacoes->isEmpty()) {
+            return response()->json(['message' => 'Nenhuma solicitação finalizada encontrada.'], 404);
+        }
+
+        // Gerar o PDF
+        $mpdf = new Mpdf();
+        $html = "<h1>Relatório de Uso do Veículo</h1>";
+        $html .= "<p>Colaborador: {$user->name}</p>";
+        $html .= "<p>ID: {$user->id}</p>";
+        $html .= "<p>Email: {$user->email}</p>";
+
+        // Loop através das solicitações para adicionar ao PDF
+        foreach ($solicitacoes as $solicitar) {
             $veiculo = $solicitar->veiculo;
             $html .= "<h2>Solicitação ID: {$solicitar->id}</h2>";
             $html .= "<p>Veículo: {$veiculo->marca} {$veiculo->modelo}</p>";
@@ -224,43 +230,14 @@
             $html .= "<p>Quilometragem Inicial: {$solicitar->velocimetro_inicio}</p>";
             $html .= "<p>Quilometragem Final: {$solicitar->velocimetro_final}</p>";
             $html .= "<p>Observações: {$solicitar->obs_user}</p>";
-        
-            $mpdf->WriteHTML($html);
-    
-            return response($mpdf->Output(), 200)->header('Content-Type', 'application/pdf');
-           
+            $html .= "<hr>"; // Linha horizontal para separar as solicitações
+        }
 
+        // Escreve o HTML no PDF
+        $mpdf->WriteHTML($html);
 
-
-
-
-
-
-
-
-
-
-
-
-
-        //     // Buscar a solicitação pelo ID
-        //     // Dados relacionados
-        //     $user = auth()->user();// Usuário associado
-        //     $solicitar = Solicitar::where('user_id', $user)->get();
-        //     dd($solicitar);
-        //     // with(['user', 'veiculo'])->where('user_id', $user)->get();
-        //     $veiculo = $solicitar->veiculo; // Veículo associado
-            
-        //     // Dados necessários
-        //     dd($solicitar);
-        //     $hora_inicial = $solicitar->hora_inicial;
-        //     $data1 = \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/y');
-        //     $data2 = \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/y');
-        //     $hora1 = \Carbon\Carbon::parse($solicitar->hora_inicio)->format('h:i A');
-        //     $hora2 = \Carbon\Carbon::parse($solicitar->hora_final)->format('h:i A');
-        //     $km = $veiculo->velocimetro_final - $veiculo->velocimetro_inicio;
-        //     $namec = Solicitar::where('user_id', $user)->with('user')->get();
-
+        // Retorna o PDF como resposta
+        return response($mpdf->Output(), 200)->header('Content-Type', 'application/pdf');
         }
 
         
