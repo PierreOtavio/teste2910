@@ -17,12 +17,23 @@
         </form>
     @endif
 
+    <script>   
+        setTimeout(() => {
+            const successMessage = document.getElementById("message");
+            if (successMessage) {
+                successMessage.style.transition = "opacity 0.5s ease";
+                successMessage.style.opacity = "0";
+                setTimeout(() => successMessage.remove(), 500);
+            }
+        }, 5000);
+    </script>
+
 @stop
 
 @section('content')
    <div class="content">
     @if (session('sucess'))
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-success" id="message" role="alert">
            {{ session('sucess') }}
         </div>
     @endif

@@ -30,11 +30,22 @@
 @section('content')
    <div class="content">
     @if (session('sucess')) 
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-success" id="message" role="alert">
            {{ session('sucess') }}
         </div>
    </div>
    @endif
+
+   <script>   
+    setTimeout(() => {
+        const successMessage = document.getElementById("message");
+        if (successMessage) {
+            successMessage.style.transition = "opacity 0.5s ease";
+            successMessage.style.opacity = "0";
+            setTimeout(() => successMessage.remove(), 500);
+        }
+    }, 5000);
+    </script>
    <table class="table table-bordered table-hover">
        <thead>
            <tr>
@@ -105,7 +116,7 @@
                             <form action="{{ route('veiculos.destroy', $veiculo->id) }}" method="POST" style="display: inline-block">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Certeza que deseja excluir?')">Excluir</button>
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Certeza que deseja excluir?')">Excluir</button>
                             </form>
                         </td>
                     @else

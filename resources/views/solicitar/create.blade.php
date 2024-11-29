@@ -1,6 +1,16 @@
 @extends('layouts.darkMode')
 
 @section('content_header')
+<script>   
+    setTimeout(() => {
+        const successMessage = document.getElementById("message");
+        if (successMessage) {
+            successMessage.style.transition = "opacity 0.5s ease";
+            successMessage.style.opacity = "0";
+            setTimeout(() => successMessage.remove(), 500);
+        }
+    }, 5000);
+</script>
 @stop
 
 @section('content')

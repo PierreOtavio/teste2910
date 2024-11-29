@@ -16,14 +16,18 @@ class Solicitar extends Model
         'veiculo_id',
         'situacao',
         'user_id',
+        'placa_confirmar',
         'obs_user',
     ];
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function veiculo()
     {
         return $this->belongsTo(Veiculo::class);
     }
-    public function user() 
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
-    }
+
 }

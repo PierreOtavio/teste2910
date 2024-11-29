@@ -1,6 +1,16 @@
 @extends('layouts.darkMode')
 @section('content_header')
-
+<script>   
+    setTimeout(() => {
+        const successMessage = document.getElementById("message");
+        if (successMessage) {
+            successMessage.style.transition = "opacity 0.5s ease";
+            successMessage.style.opacity = "0";
+            setTimeout(() => successMessage.remove(), 500);
+        }
+    }, 5000);
+</script>
+@endsection
 
 @section('content')
 <div class="container">
@@ -14,14 +24,14 @@
                         @csrf
 
                         @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                        <div class="alert alert-danger" id="message" role="alert">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
 
                         <div class="row mb-3">
                             <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Nome') }}</label>

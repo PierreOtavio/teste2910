@@ -2,15 +2,26 @@
 
 @section('content_header')
 @if(session('success'))
-    <div class="alert alert-success">
+    <div class="alert alert-success" id="message" role="alert">
         {{ session('success') }}
     </div>
     @endif
 @if(session('error'))
-    <div class="alert alert-danger">
+    <div class="alert alert-danger" id="message" role="alert">
         {{ session('error') }}
     </div>
 @endif
+
+<script>   
+    setTimeout(() => {
+        const successMessage = document.getElementById("message");
+        if (successMessage) {
+            successMessage.style.transition = "opacity 0.5s ease";
+            successMessage.style.opacity = "0";
+            setTimeout(() => successMessage.remove(), 500);
+        }
+    }, 5000);
+</script>
 
 @stop
 

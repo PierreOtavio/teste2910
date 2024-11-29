@@ -185,7 +185,7 @@
             $solicitars = Solicitar::where('situacao', 'Finalizada')->get();
 
             if (auth()->user()->cargo == 0) {
-                $solicitars = Solicitar::where('situacao')->with('veiculo')->get();
+                $solicitars = Solicitar::where('situacao', 'Finalizada')->with('veiculo')->get();
             } else {
                 $solicitars = Solicitar::where('user_id', $user->id)
                     ->where('situacao', 'Finalizada')
@@ -196,44 +196,46 @@
             return view('solicitar.finalizadas', compact('solicitars'));
         }
 
-        public function gerarPDF($id) {
-            $solicitar = Solicitar::findOrFail($id);
-            $veiculo = Veiculo::findOrFail($id);
-            $user = User::findOrFail($id);
-            if ($solicitar) {
-        // Obtém a placa do veículo
-            $hora_inicial = $solicitar->placa;
-
-        // Busca a solicitação associada ao veículo (caso exista)
-            $solicitar = Solicitar::where('veiculo_id', $id)->first();
-
-        // Obtém a hora inicial, caso exista
-            $hora_inicial = $solicitar ? $solicitar->hora_inicial : 'N/A';
-
+        public function gerarPDF($id)
+        {
+            // Buscar a solicitação pelo ID
+            // Dados relacionados
+            $user = auth()->user();// Usuário associado
+            $solicitar = 
+            Solicitar::where('user_id', $user)->get();
+            dd($solicitar);
+            // with(['user', 'veiculo'])->where('user_id', $user)->get();
+            $veiculo = $solicitar->veiculo; // Veículo associado
+            
+            // Dados necessários
+            dd($solicitar);
+            $hora_inicial = $solicitar->hora_inicial;
             $data1 = \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/y');
             $data2 = \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/y');
             $hora1 = \Carbon\Carbon::parse($solicitar->hora_inicio)->format('h:i A');
             $hora2 = \Carbon\Carbon::parse($solicitar->hora_final)->format('h:i A');
             $km = $veiculo->velocimetro_final - $veiculo->velocimetro_inicio;
-            $namec = $solicitar->user->name;
+            $namec = Solicitar::where('user_id', $user)->with('user')->get();
 
+            // Gerar o PDF
             $mpdf = new Mpdf();
-            $html = '<h1>Relatório do Veículo</h1>';
-            $html .= "<p>Colaborador:  $namec </p>";
-            $html .= "<p>ID:  $user->id  </p>";
-            $html .= "<p>Telefone:    </p>";
-            $html .= "<p>Email:  $user->email  </p>";
-            $html .= "<p>Veículo:  $veiculo->marca $veiculo->modelo </p>";
+            $html = "<h1>Relatório de Uso do Veículo <p>O.S.: $solicitar->id </p></h1>";
+            $html .= "<p>Colaborador: $user->name </p>";
+            $html .= "<p>ID: $user->id </p>";
+            $html .= "<p>Email: $user->email </p>";
+            $html .= "<p>Veículo: $veiculo->marca $veiculo->modelo </p>";
             $html .= "<p>Placa: $veiculo->placa </p>";
-            $html .= "<p>O.S.:  $solicitar->id  </p>";
-            $html .= "<p>Data:  $data1 - $data2  </p>";
-            $html .= "<p>Hora:  $hora1 - $hora2  </p>";
-            $html .= "<p>Km:  $km </p>";
+            $html .= "<p>Data: $data1 - $data2 </p>";
+            $html .= "<p>Hora: $hora1 - $hora2 </p>";
+            $html .= "<p>Km: $km </p>";
+            $html .= "<p>Observações feita pelo colaborador: $solicitar->obs_user </p>";
+
             $mpdf->WriteHTML($html);
 
             return response($mpdf->Output(), 200)->header('Content-Type', 'application/pdf');
-            }
         }
+
+        
 
         public function exportarExcel($id)
         {
