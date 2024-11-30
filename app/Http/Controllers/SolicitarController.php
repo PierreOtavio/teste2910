@@ -132,7 +132,7 @@
                 return redirect()->back()->with('error', 'A placa informada não corresponde à placa do veículo.');
             }
 
-            if ($request->input('velocimetro_inicio') > ('velocimetro_final')) {
+            if ($veiculo->velocimetro_inicio > $request->input('velocimetro_final')) {
                 return redirect()->back()->with('error', 'A quilometragem final não pode ser menor que a inicial.');
             }
             
@@ -212,23 +212,31 @@
             return response()->json(['message' => 'Nenhuma solicitação finalizada encontrada.'], 404);
         }
 
+        
         // Gerar o PDF
-        $mpdf = new Mpdf();
-        $html = "<h1>Relatório de Uso do Veículo</h1>";
-        $html .= "<p>Colaborador: {$user->name}</p>";
-        $html .= "<p>ID: {$user->id}</p>";
-        $html .= "<p>Email: {$user->email}</p>";
-
-        // Loop através das solicitações para adicionar ao PDF
         foreach ($solicitacoes as $solicitar) {
+            $mpdf = new Mpdf();
+            $html = "<h1>Relatório de Uso do Veículo</h1>";
+            $html .= "<p>Colaborador: {$user->name}</p>";
+            $html .= "<p>ID: {$user->id}</p>";
+            $html .= "<p>Email: {$user->email}</p>";
+            
+            $data1 = \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/y');
+            $data2 = \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/y');
+            $hora1 = \Carbon\Carbon::parse($solicitar->hora_inicio)->format('h:i A');
+            $hora2 = \Carbon\Carbon::parse($solicitar->hora_final)->format('h:i A');
+            
+            // Loop através das solicitações para adicionar ao PDF
             $veiculo = $solicitar->veiculo;
+            $percorrido = $veiculo->velocimetro_final - $veiculo->velocimetro_inicio;
             $html .= "<h2>Solicitação ID: {$solicitar->id}</h2>";
             $html .= "<p>Veículo: {$veiculo->marca} {$veiculo->modelo}</p>";
             $html .= "<p>Placa: {$veiculo->placa}</p>";
-            $html .= "<p>Data Inicial: {$solicitar->data_inicial}</p>";
-            $html .= "<p>Data Final: {$solicitar->data_final}</p>";
-            $html .= "<p>Quilometragem Inicial: {$solicitar->velocimetro_inicio}</p>";
-            $html .= "<p>Quilometragem Final: {$solicitar->velocimetro_final}</p>";
+            $html .= "<p>Data Inicial: $data1</p>";
+            $html .= "<p>Data Final: $data2</p>";
+            $html .= "<p>Quilometragem Inicial: {$veiculo->velocimetro_inicio} km </p>";
+            $html .= "<p>Quilometragem Final: {$veiculo->velocimetro_final} km </p>";
+            $html .= "<p>Quilometros Percorridos: $percorrido km</p>";
             $html .= "<p>Observações: {$solicitar->obs_user}</p>";
             $html .= "<hr>"; // Linha horizontal para separar as solicitações
         }
@@ -242,114 +250,68 @@
 
         
 
-        public function exportarExcel($id)
-        {
-            $spreadsheet = new Spreadsheet();
-            $sheet = $spreadsheet->getActiveSheet();
+        public function exportarTodasExcel()
+{
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
 
-            $solicitar = Solicitar::findOrFail($id);
-            $veiculo = Veiculo::findOrFail($id);
-            $user = User::findOrFail($id);
-            if ($solicitar) {
-        // Obtém a placa do veículo
-            $hora_inicial = $solicitar->placa;
-           
+    // Cabeçalho
+    $sheet->setCellValue('A1', 'Colaborador');
+    $sheet->setCellValue('B1', 'Email');
+    $sheet->setCellValue('C1', 'Veículo');
+    $sheet->setCellValue('D1', 'Placa');
+    $sheet->setCellValue('E1', 'Data Inicial');
+    $sheet->setCellValue('F1', 'Data Final');
+    $sheet->setCellValue('G1', 'Hora Inicial');
+    $sheet->setCellValue('H1', 'Hora Final');
+    $sheet->setCellValue('I1', 'Motivo');
+    $sheet->setCellValue('J1', 'Situação');
 
-        // Busca a solicitação associada ao veículo (caso exista)
-            $solicitar = Solicitar::where('veiculo_id', $id)->first();
+    // Estilizar o cabeçalho
+    $sheet->getStyle('A1:J1')->applyFromArray([
+        'font' => [
+            'bold' => true,
+            'size' => 12,
+            'color' => ['argb' => 'FFFFFF'],
+        ],
+        'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'startColor' => ['argb' => '4CAF50'],
+        ],
+        'alignment' => [
+            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+        ],
+    ]);
 
-        // Obtém a hora inicial, caso exista
-            $hora_inicial = $solicitar ? $solicitar->hora_inicial : 'N/A';
+    // Dados
+    $solicitars = Solicitar::with(['veiculo', 'user'])->where('situacao', 'Finalizada')->get();
+    $row = 2;
+    foreach ($solicitars as $solicitar) {
+        $sheet->setCellValue('A' . $row, $solicitar->user->name);
+        $sheet->setCellValue('B' . $row, $solicitar->user->email);
+        $sheet->setCellValue('C' . $row, $solicitar->veiculo->marca . ' ' . $solicitar->veiculo->modelo);
+        $sheet->setCellValue('D' . $row, $solicitar->veiculo->placa);
+        $sheet->setCellValue('E' . $row, \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y'));
+        $sheet->setCellValue('F' . $row, \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y'));
+        $sheet->setCellValue('G' . $row, $solicitar->hora_inicial);
+        $sheet->setCellValue('H' . $row, $solicitar->hora_final);
+        $sheet->setCellValue('I' . $row, $solicitar->motivo);
+        $sheet->setCellValue('J' . $row, $solicitar->situacao);
+        $row++;
+    }
 
-            $namec = $solicitar->user->name;
-            $data1 = \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/y');
-            $data2 = \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/y');
-            $hora1 = \Carbon\Carbon::parse($solicitar->hora_inicio)->format('h:i A');
-            $hora2 = \Carbon\Carbon::parse($solicitar->hora_final)->format('h:i A');
+    // Ajustar largura das colunas
+    foreach (range('A', 'J') as $col) {
+        $sheet->getColumnDimension($col)->setAutoSize(true);
+    }
 
-    // Adicionar dados
-            $sheet->setCellValue('B2', 'Colaborador:');
-            $sheet->setCellValue('B3', $namec);
-            $sheet->setCellValue('C2', 'ID:');
-            $sheet->setCellValue('C3',$user->id);
-            $sheet->setCellValue('D2', 'Telefone:');
-            $sheet->setCellValue('D3', 1);
-            $sheet->setCellValue('E2', 'Email');
-            $sheet->setCellValue('E3', $user->email);
-            $sheet->setCellValue('F2', 'Veículo:');
-            $sheet->setCellValue('F3', $veiculo->marca, $veiculo->modelo);
-            $sheet->setCellValue('G2', 'Placa:');
-            $sheet->setCellValue('G3', $veiculo->placa);
-            $sheet->setCellValue('H2', 'O.S.:');
-            $sheet->setCellValue('H3', $solicitar->id);
-            $sheet->setCellValue('I2', 'Data:');
-            $sheet->setCellValue('I3', $data1, $data2);
-            $sheet->setCellValue('J2', 'Hora Inicial:');
-            $sheet->setCellValue('J3', $hora1);
-            $sheet->setCellValue('K2', 'Hora Final:');
-            $sheet->setCellValue('K3', $hora2);
-            $sheet->setCellValue('L2', 'Km:');
-            $sheet->setCellValue('L3',1);
+    // Baixar o arquivo
+    $writer = new Xlsx($spreadsheet);
+    $filename = 'todas_solicitacoes.xlsx';
 
-            // Aplicar estilo ao cabeçalho
-            $sheet->getStyle('B2:L2')->applyFromArray([
-                'font' => [
-                'bold' => true,
-                'size' => 12,
-                'color' => ['argb' => 'FFFFFF'], //cor do texto
-            ],
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                    'startColor' => ['argb' => '4CAF50'], //cor d fundo
-            ],
-        ]);
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    $writer->save('php://output');
+}
 
-                //ajusta a largura das colunas
-                foreach (range('B', 'L') as $col) {
-                 $sheet->getColumnDimension($col)->setWidth(20);
-                }
-
-                    // Ajustar a altura
-                $sheet->getRowDimension('2')->setRowHeight(25);
-                $sheet->getRowDimension('3')->setRowHeight(20);
-
-                //bordas normais
-                $sheet->getStyle('B2:L3')->applyFromArray([
-                'borders' => [
-                    'allBorders' => [
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN, // Borda fina
-                            'color' => ['argb' => '000000'], // Cor preta
-                    ],
-                 ],
-            ]);
-
-                //borda superior espessa
-                $sheet->getStyle('B2:L2')->applyFromArray([
-                    'borders' => [
-                        'allBorders' => [
-                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK, // Borda espessa
-                                'color' => ['argb' => '000000'], // Cor da borda: preta
-                        ],
-                    ],
-                ]);
-
-                        //alinhamento
-                        $sheet->getStyle('B2:L3')->applyFromArray([
-                            'alignment' => [
-                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-                    ],
-                    ]);
-
-
-                    // Baixar o arquivo
-             $writer = new Xlsx($spreadsheet);
-             $filename = 'relatorio.xlsx';
-
-                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-             header('Content-Disposition: attachment; filename="' . $filename . '"');
-
-                $writer->save('php://output');
-            }
-        }
     }

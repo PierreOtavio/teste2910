@@ -155,7 +155,6 @@
     color: crimson;
 }
 
-/*PARTE DO QR CODE*/
 .info-container {
     display: flex;
     flex-wrap: wrap;
@@ -284,4 +283,83 @@ input.form-control:focus {
     background-color: #2d243c;
     border-color: #ff3d71;
     box-shadow: none;
+}
+
+.toast-success {
+    position: fixed; /* Fixa a posição do toast na tela */
+    top: 20px; /* Distância do topo da tela */
+    left: 55%; /* Centraliza horizontalmente */
+    transform: translateX(-55%); /* Centraliza horizontalmente */
+    z-index: 1050; /* Garante que o toast ficará acima de outros elementos */
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+/* Para mensagens de erro */
+.toast-error {
+    position: fixed; /* Fixa a posição do toast na tela */
+    top: 20px; /* Distância do topo da tela */
+    left: 55%; /* Centraliza horizontalmente */
+    transform: translateX(-55%); /* Centraliza horizontalmente */
+    z-index: 1050;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.d-flex.justify-content-end {
+    margin-bottom: 15px;
+}
+
+.btn-success {
+    background-color: #4caf50;
+    border-color: #4caf50;
+    color: #fff;
+}
+
+/* Estilização para o título e alinhamento do botão */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Botão "Exportar Todas em Excel" */
+.btn-success {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espaço entre o ícone e o texto */
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #28a745; /* Cor verde padrão */
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Cor verde mais escura no hover */
+    text-decoration: none;
+}
+
+/* Alerta de sucesso */
+.alert-success {
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+}
+
+/* Estilo para mensagens temporárias */
+#message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.d-flex.justify-content-end {
+    margin-bottom: 10px; /* Reduz o espaço entre o botão e a tabela */
 }

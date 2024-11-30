@@ -23,6 +23,7 @@
         
         <form method="POST" action="{{ route('login') }}" class="container">
             @csrf
+            <h2>Login</h2>
             <section class="input-box" request>
                 <input type="text" name="cpf" placeholder="Digite o CPF" />
                 <i class="bx bxs-user"></i>
@@ -42,25 +43,16 @@
                         </span>
                 @enderror
             </section>
-
             
             
-            <section class="remember-forgot-box">
+            {{-- <section class="remember-forgot-box">
                 <div class="remember-me">
                     <input type="checkbox" name="remember" id="remember" />
                     <label for="remember" class="form-check-label">
                         <h5>Lembre de mim</h5>
                     </label>
                 </div>
-                <a class="forgot-password" href="{{ route('password.request') }}">
-                    <h5>Esqueceu a senha?</h5>
-                </a>
-            </section>
-            @error('forgot_password')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                @enderror
+            </section> --}}
 
             <button class="login-button" type="submit">Login</button>
             <br>
