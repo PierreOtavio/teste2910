@@ -23,6 +23,11 @@ class CreateSolicitarsTable extends Migration
             $table->string('situacao')->default('Pendente');
             $table->mediumText('obs_user')->default('não há observações');
 
+            $table->mediumText('motivo_recusado')->default('Sem explicação');
+            $table->unsignedBigInteger('id_recusado')->nullable();
+            $table->foreign('id_recusado')->references('id')->on('users');
+            $table->time('hora_recusado')->default('00:00:00');
+
             $table->unsignedBigInteger('veiculo_id');
             $table->foreign('veiculo_id')->references('id')->on('veiculos');
 

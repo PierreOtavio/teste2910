@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VeiculoController;
 use App\Http\Controllers\SolicitarController;
+use App\Models\Solicitar;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -54,6 +55,8 @@ Route::get('solicitar/end/{id}', [SolicitarController::class, 'end'])->name('sol
 Route::post('solicitar/finalizar/{id}', [SolicitarController::class, 'finalizar'])->name('solicitar.finalizar')->middleware('auth');
 
 Route::match(['get', 'post'],'/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])->name('solicitar.aceitar')->middleware('auth');
+
+Route::match(['get', 'post'], '/solicitar/{id}/?', [SolicitarController::class, 'motivoRecusado' ])->name('solicitar.recusado')->middleware('auth');
 
 Route::post('/solicitar/{id}/recusar', [SolicitarController::class, 'recusar'])->name('solicitar.recusar')->middleware('auth');
 

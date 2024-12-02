@@ -170,14 +170,29 @@
             return redirect()->route('solicitar.show',  ['id' => $solicitar->id])->with('success', 'Solicitação aceita.');
         }
 
-        public function recusar($id) {
+        public function recusar($id, Request $request) {
             $solicitar = Solicitar::findOrFail($id);
             $solicitar->situacao = 'Recusado';
             $solicitar->save();
 
             $veiculo = Veiculo::findOrFail($id);
 
-            return redirect()->route('solicitar.show', $solicitar->veiculo->id )->with('danger', 'Solicitação recusada.');
+            $this->motivoRecusado($id, $request);
+        }
+        
+        public function motivoRecusado($id, Request $request) {
+            $solicitar = Solicitar::findOrFail($id);
+
+            $request->validate([
+                'motivo_recusado' => 'required|string'
+            ]);
+            
+            $solicitar->motivo_recusado = $request->input('motivo_recusado');
+            $solicitar->hora_recusado = Carbon::now();
+            $solicitar->id_recusado = Auth::id();
+            $solicitar->save();
+            
+            return view('solicitar.recusado', ['id' => $solicitar->id]);
         }
 
         public function finalizadas() {
