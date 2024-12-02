@@ -10,6 +10,16 @@
         }
     }, 5000);
 </script>
+@if(session('success'))
+    <div class="alert alert-success" id="message" role="alert">
+        {{ session('success') }}
+    </div>
+@endif
+@if(session('danger'))
+    <div class="alert alert-danger" id="message" role="alert">
+        {{ session('danger') }}
+    </div>
+@endif
 @endsection
 
 @section('content')

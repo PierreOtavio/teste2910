@@ -18,9 +18,10 @@
      <div class="content">
         <div class="card">
             <div class="card-body"><h3>{{ $user->name }}</h3>
-                <p><strong>E-mail:</strong> {{ $user->email }}</p>
-                <p><strong>CPF:</strong> {{ $user->cpf }}</p>
-                <p><strong>Cargo:</strong> 
+                <p><strong>E-mail: </strong> {{ $user->email }}</p>
+                <p><strong>CPF: </strong> {{ $user->cpf }}</p>
+                <p><strong>Telefone: </strong>{{ $user->telefone }}</p>
+                <p><strong>Cargo: </strong> 
                     @if ($user->cargo == 0)
                         Responsável pelo setor
                     @endif

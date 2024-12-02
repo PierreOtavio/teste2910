@@ -35,7 +35,8 @@ namespace App\Http\Controllers;
                 'cpf' => 'required|string|size:11|unique:users',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8|confirmed',
-                'cargo' => 'required|in:0,1,2',
+                'telefone' => 'required|string|max:15',
+                'cargo' => 'required|in:0,1',
             ]);
             
             User::create([
@@ -43,6 +44,7 @@ namespace App\Http\Controllers;
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
                 'cpf' => $request->cpf,
+                'telefone' => $request->telefone,
                 'cargo' => $request->cargo,
             ]);
 
@@ -72,6 +74,7 @@ namespace App\Http\Controllers;
                 'email' => 'required|email|max:255',
                 'cpf' => 'required|string|size:11',
                 'cargo' => 'required|in:0,1',
+                'telefone' => 'required|string|max:15',
             ]);
 
             $user->update($dadosValidados);

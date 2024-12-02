@@ -52,6 +52,20 @@
                         </div>
 
                         <div class="row mb-3">
+                            <label for="telefone" class="col-md-4 col-form-label text-md-end">{{ __('Telefone') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="telefone" type="text" class="form-control @error('telefone') is-invalid @enderror" name="telefone" value="{{ old('telefone', $user->telefone) }}" required autocomplete="telefone">
+
+                                @error('telefone')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Endereço de E-mail') }}</label>
 
                             <div class="col-md-6">
@@ -69,11 +83,10 @@
                             <label for="cargo" class="col-md-4 col-form-label text-md-end">Centro de Custo</label>
                             <div class="col-md-6">
                                 <div class="custom-select-wrapper">
-                                    <select class="custom-select" id="cargo" name="cargo"  request>
+                                    <select class="custom-select" id="cargo" name="cargo" value="{{ old('email', $user->email) }}" request>
                                         <option  disabled selected>Escolha uma opção</option>
                                         <option value="0">Responsável pelo setor</option>
                                         <option value="1">Colaborador comum</option>
-                                        <option value="2">Colaborador terceirizado</option>
                                     </select>
                                 </div>
                                 @error('cargo')

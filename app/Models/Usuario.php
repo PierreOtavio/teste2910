@@ -18,6 +18,7 @@ class Usuario extends Model
         'email',
         'password',
         'cargo',
+        'telefone',
     ];
     public function solicitars()
     {

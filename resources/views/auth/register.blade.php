@@ -31,6 +31,16 @@
                     </span>
                 @enderror
             </section>
+
+            <section class="input-box">
+                <input type="text" name="telefone" placeholder="Digite o Telefone" value="{{ old('telefone') }}" required />
+                <i class="bx bxs-id-card"></i>
+                @error('telefone')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                @enderror
+            </section>
             
             <section class="input-box">
                 <input type="email" name="email" placeholder="Digite seu e-mail" value="{{ old('email') }}" required />
