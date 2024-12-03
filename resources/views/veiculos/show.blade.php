@@ -37,7 +37,8 @@
                     <p><strong>Capacidade:</strong> {{ $veiculo->capacidade }}</p>
                     <p><strong>Chassi:</strong> {{ $veiculo->chassi }}</p>
                     <p><strong>Km atual:</strong> {{ $veiculo->km_atual }}</p>
-                    <p><strong>Quantos Km faltam para a revisão:</strong> {{ $veiculo->km_revisao }}</p>
+                    <p><strong>Quantos Km faltam para a revisão:</strong> {{ $veiculo->km_revisao - $veiculo->velocimetro_final }}</p>
+                    <p><strong>Observações do Veículo: </strong>{{ $veiculo->observacao }}</p>
                     <p><strong>Funcionamento:</strong> 
                         @if ($veiculo->funcionamento == 0)
                             Disponível
@@ -48,7 +49,9 @@
                 </div>
                 <div class="qr-code-container">
                     <p><strong>QR Code:</strong></p>
-                    <img src="{{ asset('qrcodes/' . $veiculo->qr_code) }}" alt="QR Code do veículo">
+                    <img id="qrCodeImage" src="{{ asset('qrcodes/' . $veiculo->qr_code) }}" alt="QR Code do veículo">
+                    <br>
+                    <button onclick="imprimirQRCode()" class="btn btn-info">Imprimir QR Code</button>
                 </div>
             </div>
         </div>
@@ -73,5 +76,45 @@
         </div>
     </div>
 </div>
+
+<script>
+    function imprimirQRCode() {
+        var qrCodeImage = document.getElementById('qrCodeImage').src;
+
+        // Verifique se a URL está correta
+        console.log("QR Code Image URL:", qrCodeImage);
+
+        // Cria uma nova janela para impressão
+        var printWindow = window.open('', '', 'height=600,width=800');
+        printWindow.document.write('<html><head><title>Imprimir QR Code</title>');
+        
+        // Adicionando CSS para centralizar e aumentar o QR Code
+        printWindow.document.write('<style>');
+        printWindow.document.write('body { text-align: center; padding: 50px; }');
+        printWindow.document.write('img { width: 300px; height: auto; margin-top: 50px; }'); // Ajuste o tamanho do QR Code
+        printWindow.document.write('</style>');
+
+        printWindow.document.write('</head><body>');
+
+        // Cria a imagem na nova janela
+        var imgElement = printWindow.document.createElement('img');
+        imgElement.src = qrCodeImage;
+
+        // Quando a imagem carregar, então podemos chamar a impressão
+        imgElement.onload = function () {
+            printWindow.document.body.appendChild(imgElement);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close(); // Fecha o documento
+            printWindow.print(); // Chama a impressão
+        };
+
+        // Se a imagem não carregar corretamente
+        imgElement.onerror = function () {
+            printWindow.document.write('<p>Não foi possível carregar o QR Code.</p>');
+            printWindow.document.close();
+            printWindow.print();
+        };
+    }
+</script>
 
 @endsection

@@ -2,6 +2,8 @@
 
     namespace App\Http\Controllers;
 
+    use Dompdf\Dompdf;
+    use Dompdf\Options;
     use App\Controllers\VeiculoController;
     use App\Models\Solicitar;
     use App\Models\Veiculo;
@@ -12,6 +14,8 @@
     use Mpdf\Mpdf;
     use PhpOffice\PhpSpreadsheet\Spreadsheet;
     use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+    use PhpOffice\PhpSpreadsheet\Style\Border;
+    use PhpOffice\PhpSpreadsheet\Style\Style;
 
 
     class SolicitarController extends Controller
@@ -49,7 +53,7 @@
                 'veiculo_id' => 'required|exists:veiculos,id',
                 'hora_inicial' => 'required|string', 
                 'data_inicial' => 'required|date',
-                'data_final' => 'required|date',
+                'data_final' => 'required|date|after_or_equal:data_inicial',
                 'motivo' => 'required|string|max:255',
             ]);
 
@@ -82,6 +86,10 @@
         public function start($id) {
             $solicitar = Solicitar::find($id);
             $veiculo = $solicitar->veiculo;
+
+            $solicitar->hora_inicial = Carbon::now();
+            $solicitar->save();
+
             return view('solicitar.start', compact('veiculo','solicitar'))->with('success', 'Solicitação iniciada.');
         }
 
@@ -196,79 +204,66 @@
             return view('solicitar.finalizadas', compact('solicitars'));
         }
 
-        public function gerarPDF()
+        public function gerarPDF($id)
         {
-        // Captura o usuário logado
-        $user = auth()->user();
+        // Buscar a solicitação pelo ID com o relacionamento do usuário e do veículo
+    $solicitar = Solicitar::with('user', 'veiculo')->findOrFail($id);
 
-        // Buscar todas as solicitações finalizadas do usuário
-        $solicitacoes = Solicitar::with('veiculo')
-            ->where('user_id', $user->id)
-            ->where('situacao', 'Finalizada')
-            ->get();
+    // Obter os dados necessários
+    $user = $solicitar->user;  // Dados do usuário
+    $veiculo = $solicitar->veiculo;  // Dados do veículo
 
-        // Verifica se há solicitações para gerar o PDF
-        if ($solicitacoes->isEmpty()) {
-            return response()->json(['message' => 'Nenhuma solicitação finalizada encontrada.'], 404);
-        }
+    // Passar as variáveis para a view
+    $dados = compact('user', 'veiculo', 'solicitar'); // Passar 'user', 'veiculo' e 'solicitar'
 
+    // Renderizar a view Blade como HTML
+    $html = view('solicitar.pdf', $dados)->render();
+
+    // Configurar o Dompdf
+    $options = new Options();
+    $options->set('defaultFont', 'Arial');
+    $dompdf = new Dompdf($options);
+
+    // Carregar o HTML no Dompdf
+    $dompdf->loadHtml($html);
+
+    // Configurar o tamanho e a orientação da página
+    $dompdf->setPaper('A4', 'portrait');
+
+    // Renderizar o PDF
+    $dompdf->render();
+    // Retornar o PDF para download
+    return response($dompdf->output(), 200)
+        ->header('Content-Type', 'application/pdf')
+        ->header('Content-Disposition', 'attachment; filename="relatorio_uso_veiculo.pdf"');
+}
         
-        // Gerar o PDF
-        foreach ($solicitacoes as $solicitar) {
-            $mpdf = new Mpdf();
-            $html = "<h1>Relatório de Uso do Veículo</h1>";
-            $html .= "<p>Colaborador: {$user->name}</p>";
-            $html .= "<p>ID: {$user->id}</p>";
-            $html .= "<p>Email: {$user->email}</p>";
-            
-            $data1 = \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/y');
-            $data2 = \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/y');
-            $hora1 = \Carbon\Carbon::parse($solicitar->hora_inicio)->format('h:i A');
-            $hora2 = \Carbon\Carbon::parse($solicitar->hora_final)->format('h:i A');
-            
-            // Loop através das solicitações para adicionar ao PDF
-            $veiculo = $solicitar->veiculo;
-            $percorrido = $veiculo->velocimetro_final - $veiculo->velocimetro_inicio;
-            $html .= "<h2>Solicitação ID: {$solicitar->id}</h2>";
-            $html .= "<p>Veículo: {$veiculo->marca} {$veiculo->modelo}</p>";
-            $html .= "<p>Placa: {$veiculo->placa}</p>";
-            $html .= "<p>Data Inicial: $data1</p>";
-            $html .= "<p>Data Final: $data2</p>";
-            $html .= "<p>Quilometragem Inicial: {$veiculo->velocimetro_inicio} km </p>";
-            $html .= "<p>Quilometragem Final: {$veiculo->velocimetro_final} km </p>";
-            $html .= "<p>Quilometros Percorridos: $percorrido km</p>";
-            $html .= "<p>Observações: {$solicitar->obs_user}</p>";
-            $html .= "<hr>"; // Linha horizontal para separar as solicitações
-        }
-
-        // Escreve o HTML no PDF
-        $mpdf->WriteHTML($html);
-
-        // Retorna o PDF como resposta
-        return response($mpdf->Output(), 200)->header('Content-Type', 'application/pdf');
-        }
 
         
 
-        public function exportarTodasExcel()
+public function exportarTodasExcel()
 {
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
 
+
+$sheet->getStyle('B2:L2')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THICK);
+
     // Cabeçalho
-    $sheet->setCellValue('A1', 'Colaborador');
-    $sheet->setCellValue('B1', 'Email');
-    $sheet->setCellValue('C1', 'Veículo');
-    $sheet->setCellValue('D1', 'Placa');
-    $sheet->setCellValue('E1', 'Data Inicial');
-    $sheet->setCellValue('F1', 'Data Final');
-    $sheet->setCellValue('G1', 'Hora Inicial');
-    $sheet->setCellValue('H1', 'Hora Final');
-    $sheet->setCellValue('I1', 'Motivo');
-    $sheet->setCellValue('J1', 'Situação');
+    $sheet->setCellValue('B2', 'Colaborador');
+    $sheet->setCellValue('C2', 'Email');
+    $sheet->setCellValue('D2', 'ID da Solicitação');
+    $sheet->setCellValue('E2', 'Veículo');
+    $sheet->setCellValue('F2', 'Placa');
+    $sheet->setCellValue('G2', 'Data Inicial');
+    $sheet->setCellValue('H2', 'Data Final');
+    $sheet->setCellValue('I2', 'Hora Inicial');
+    $sheet->setCellValue('J2', 'Hora Final');
+    $sheet->setCellValue('K2', 'Motivo');
+    $sheet->setCellValue('L2', 'Situação');
 
     // Estilizar o cabeçalho
-    $sheet->getStyle('A1:J1')->applyFromArray([
+    $sheet->getStyle('B2:L2')->applyFromArray([
         'font' => [
             'bold' => true,
             'size' => 12,
@@ -284,26 +279,30 @@
     ]);
 
     // Dados
+    
     $solicitars = Solicitar::with(['veiculo', 'user'])->where('situacao', 'Finalizada')->get();
-    $row = 2;
+    $row = 3;
     foreach ($solicitars as $solicitar) {
-        $sheet->setCellValue('A' . $row, $solicitar->user->name);
-        $sheet->setCellValue('B' . $row, $solicitar->user->email);
-        $sheet->setCellValue('C' . $row, $solicitar->veiculo->marca . ' ' . $solicitar->veiculo->modelo);
-        $sheet->setCellValue('D' . $row, $solicitar->veiculo->placa);
-        $sheet->setCellValue('E' . $row, \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y'));
-        $sheet->setCellValue('F' . $row, \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y'));
-        $sheet->setCellValue('G' . $row, $solicitar->hora_inicial);
-        $sheet->setCellValue('H' . $row, $solicitar->hora_final);
-        $sheet->setCellValue('I' . $row, $solicitar->motivo);
-        $sheet->setCellValue('J' . $row, $solicitar->situacao);
+        $sheet->setCellValue('B' . $row, $solicitar->user->name);
+        $sheet->setCellValue('C' . $row, $solicitar->user->email);
+        $sheet->setCellValue('D' . $row, $solicitar->id);
+        $sheet->setCellValue('E' . $row, $solicitar->veiculo->marca . ' ' . $solicitar->veiculo->modelo);
+        $sheet->setCellValue('F' . $row, $solicitar->veiculo->placa);
+        $sheet->setCellValue('G' . $row, \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y'));
+        $sheet->setCellValue('H' . $row, \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y'));
+        $sheet->setCellValue('I' . $row, $solicitar->hora_inicial);
+        $sheet->setCellValue('J' . $row, $solicitar->hora_final);
+        $sheet->setCellValue('K' . $row, $solicitar->motivo);
+        $sheet->setCellValue('L' . $row, $solicitar->situacao);
         $row++;
     }
 
     // Ajustar largura das colunas
-    foreach (range('A', 'J') as $col) {
+    foreach (range('B', 'L') as $col) {
         $sheet->getColumnDimension($col)->setAutoSize(true);
     }
+    $lastRow = $row - 1; // O valor de $row após o loop aponta para a próxima linha, então subtraímos 1
+    $sheet->getStyle("B3:L{$lastRow}")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
     // Baixar o arquivo
     $writer = new Xlsx($spreadsheet);
@@ -312,6 +311,5 @@
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
     $writer->save('php://output');
+}       
 }
-
-    }

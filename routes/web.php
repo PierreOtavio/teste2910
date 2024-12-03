@@ -61,6 +61,8 @@ Route::get('solicitar/finalizadas/{id}', [SolicitarController::class, 'finalizad
 
 Route::get('/gerar-pdf/{id}', [SolicitarController::class, 'gerarPDF'])->name('gerar.pdf')->middleware('auth');
 
+// Route::get('/solicitar/{id}/pdf', [SolicitarController::class, 'gerarPdf1'])->name('gerar.pdf1')->middleware('auth');
+
 Route::get('/exportar-excel/{id}', [SolicitarController::class, 'exportarExcel'])->name('exportar.excel')->middleware('auth');
 
 Route::get('/exportar-todas-excel', [SolicitarController::class, 'exportarTodasExcel'])->name('exportar.todas.excel')->middleware('auth');

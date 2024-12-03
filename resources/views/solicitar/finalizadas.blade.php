@@ -15,16 +15,16 @@
     }, 5000);
 </script> 
 
-@if (auth()->user()->cargo == 0)
+@if(auth()->user()->cargo == 0)
     <h1>Solicitações Finalizadas:</h1>
-@else 
-    <h1>Minhas Solicitações Finalizadas:</h1>
-@endif
-<div class="d-flex justify-content-end mb-3">
+    <div class="d-flex justify-content-end mb-3">
     <a href="{{ route('exportar.todas.excel') }}" class="btn btn-success">
         <i class="fa fa-file-excel-o"></i> Exportar Todas em Excel
     </a>
 </div>
+@else 
+    <h1>Minhas Solicitações Finalizadas:</h1>
+@endif
 @endsection
 
 @section('content')
@@ -52,7 +52,7 @@
                         <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
                         <td>{{ $solicitar->motivo }}</td>
                         <td>
-                            <a href="{{ route('gerar.pdf', $solicitar->veiculo->id) }}" class="btn btn-info">Gerar PDF</a>
+                            <a href="{{ route('gerar.pdf', $solicitar->id) }}" class="btn btn-info">Gerar PDF</a>
                         </td>
                     </tr>
                     @endif
