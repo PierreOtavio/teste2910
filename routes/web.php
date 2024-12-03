@@ -30,7 +30,7 @@ Route::resource('teste', UsuarioController::class)->middleware('auth');
 
 Route::get('teste.permissao/{id}', [UsuarioController::class, 'permissao'])->name('teste.permissao')->middleware('auth');
 
-Route::post('/teste/{id}/mudarStatusU', [VeiculoController::class, 'mudarStatusU'])->name('teste.mudarStatusU')->middleware('auth');
+Route::post('/teste/{id}/mudarStatusU', [UsuarioController::class, 'mudarStatusU'])->name('teste.mudarStatusU')->middleware('auth');
 
 //VEÍCULOS
 Route::resource('veiculos', VeiculoController::class)->middleware('auth');
