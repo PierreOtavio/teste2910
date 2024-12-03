@@ -155,6 +155,11 @@
             $solicitar->obs_user = $request->input('obs_user');
             $solicitar->save();
 
+            if($solicitar->situacao === 'Finalizada') {
+                $veiculo->funcionamento = 0;
+                $veiculo->save();
+            }
+
             $user = Auth::user();
 
             if ($user->cargo == 0) {
@@ -174,6 +179,11 @@
             $solicitar = Solicitar::findOrFail($id);
             $solicitar->situacao = 'Aceito';
             $solicitar->save();
+
+            if ($solicitar->situacao = 'Aceito') {
+            $veiculo = Veiculo::findOrFail($id);
+            $veiculo->funcionamento = 1;
+            }
 
             return redirect()->route('solicitar.show',  ['id' => $solicitar->id])->with('success', 'Solicitação aceita.');
         }
