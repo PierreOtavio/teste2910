@@ -11,7 +11,6 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasRoles;
     use HasApiTokens, HasFactory, Notifiable;
     use Notifiable;
 
@@ -24,6 +23,7 @@ class User extends Authenticatable
         'cargo',
         'id',
         'telefone',
+        'status',
     ];
 
     protected $hidden = [

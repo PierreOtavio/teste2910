@@ -106,7 +106,7 @@ class VeiculoController extends Controller
                 'observacao' => 'nullable|string',
                 'funcionamento' => 'nullable|string',
             ]);
-            dd($validatedData);
+            
             // Atualiza o veículo com os dados validados
             $veiculo->update($validatedData);
             // Redireciona com mensagem de sucesso

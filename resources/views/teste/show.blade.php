@@ -31,7 +31,8 @@
                     @if ($user->cargo == 2)
                         Colaborador tercerizado
                     @endif
-                </p>  
+                </p>
+                <p><strong>Status:</strong> {{ $user->status }}</p>  
             </div>
             <div class="card-footer">
                 @if (auth()->user()->cargo == 0) 

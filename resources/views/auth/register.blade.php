@@ -85,5 +85,20 @@
                 <button class="login-button" type="submit">Registrar</button>
             </section>
         </form>
+
+        <script>
+            // Espera até o conteúdo carregar
+            document.addEventListener('DOMContentLoaded', function () {
+                // Seleciona todas as mensagens de erro
+                const errorMessages = document.querySelectorAll('.invalid-feedback');
+
+                errorMessages.forEach(function (message) {
+                    // Define um timeout para esconder a mensagem após 5 segundos
+                    setTimeout(function () {
+                        message.style.display = 'none';
+                    }, 5000); // 5000ms = 5 segundos
+                });
+            });
+        </script>
     </body>
 </html>

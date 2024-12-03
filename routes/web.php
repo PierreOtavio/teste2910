@@ -30,6 +30,8 @@ Route::resource('teste', UsuarioController::class)->middleware('auth');
 
 Route::get('teste.permissao/{id}', [UsuarioController::class, 'permissao'])->name('teste.permissao')->middleware('auth');
 
+Route::post('/teste/{id}/mudarStatusU', [VeiculoController::class, 'mudarStatusU'])->name('teste.mudarStatusU')->middleware('auth');
+
 //VEÍCULOS
 Route::resource('veiculos', VeiculoController::class)->middleware('auth');
 
@@ -63,8 +65,6 @@ Route::post('/solicitar/{id}/recusar', [SolicitarController::class, 'recusar'])-
 Route::get('solicitar/finalizadas/{id}', [SolicitarController::class, 'finalizadas'])->name('solicitar.finalizadas')->middleware('auth');
 
 Route::get('/gerar-pdf/{id}', [SolicitarController::class, 'gerarPDF'])->name('gerar.pdf')->middleware('auth');
-
-// Route::get('/solicitar/{id}/pdf', [SolicitarController::class, 'gerarPdf1'])->name('gerar.pdf1')->middleware('auth');
 
 Route::get('/exportar-excel/{id}', [SolicitarController::class, 'exportarExcel'])->name('exportar.excel')->middleware('auth');
 

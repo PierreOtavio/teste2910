@@ -41,6 +41,7 @@
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
+                <th>Status:</th>
                 <th>Nome:</th>
                 <th>E-mail:</th>
                 @if (auth()->user()->cargo ==0)
@@ -53,6 +54,52 @@
         <tbody>
             @foreach ($users as $user)
                 <tr>
+                    <script>
+                        function toggleStatus(userId, isChecked) {
+    fetch(`/teste/${userId}/mudarStatusU`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            status: isChecked ? 'Ativo' : 'Inativo'
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erro na requisição');
+        }
+        return response.json(); // Espera um JSON como resposta
+    })
+    .then(data => {
+        if (data.success) {
+            alert('Status atualizado com sucesso!');
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        alert('Erro ao atualizar status!');
+        document.getElementById(`status_${userId}`).checked = !isChecked; // Reverte o estado do switch
+    });
+}
+
+                    </script>
+                                    <td>
+                                    @if (auth()->user()->cargo == 0) 
+                                                <label class="toggle-switch">
+                                                    <input type="checkbox" 
+                                                    id="status_{{ $user->id }}" 
+                                                    {{ $user->status === 'Ativo' ? 'checked' : '' }} 
+                                                    onchange="toggleStatus({{ $user->id }}, this.checked)">
+                                                                    <div class="toggle-switch-background">
+                                                                        <div class="toggle-switch-handle"></div>
+                                                                    </div>
+                                                </label>
+                                    @endif
+                                    </td>
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     @if (auth()->user()->cargo ==0)

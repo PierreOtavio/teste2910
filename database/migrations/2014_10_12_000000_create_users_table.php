@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('cpf')->unique()->default('00000000000');
             $table->string('email')->unique();
             $table->string('telefone')->default('Não informado');
+            $table->string('status')->default('Ativo');
             $table->timestamp('cpf_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->rememberToken();

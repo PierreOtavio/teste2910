@@ -1,4 +1,3 @@
-/* Tales e css da tela de login */
 * {
     font-family: "Poppins", sans-serif;
     margin: 0;
@@ -160,4 +159,75 @@ body {
 }
 a {
     color: #5a6f80;
+}
+/* Estilo para a mensagem de erro */
+.invalid-feedback {
+    color: #fff;
+    padding: 5px 10px; /* Adiciona um padding para que a mensagem tenha espaço */
+    border-radius: 80px; /* Diminuindo a borda */
+    margin-top: 8px; /* Espaço entre o campo e a mensagem de erro */
+    font-size: 0.875rem; /* Ajusta o tamanho da fonte */
+    display: block; /* Garante que a mensagem seja exibida corretamente */
+    text-align: center; /* Centraliza o texto da mensagem */
+    border: 2px solid rgb(255, 0, 0); /* Diminuindo a borda */
+}
+
+/* Estilo para o campo de entrada com erro */
+.input-box input.is-invalid {
+    border-color: rgb(255, 0, 0); /* Altera a cor da borda quando há erro */
+    background-color: rgba(
+        250,
+        250,
+        250,
+        0.9
+    ); /* Pode mudar o fundo do campo para um tom mais claro */
+}
+
+/* Garante que os campos ocupem o espaço disponível */
+.input-box {
+    display: flex;
+    flex-direction: column; /* Faz com que a mensagem de erro fique abaixo do campo */
+    width: 100%;
+    position: relative;
+    margin-top: 20px;
+}
+
+/* Ajuste para o campo de entrada */
+.input-box input {
+    width: 100%; /* Garante que o campo ocupe toda a largura disponível */
+    padding: 10px 16px 10px 38px; /* Ajuste para garantir o conforto no campo */
+    border-radius: 99px;
+    border: 3px solid transparent;
+    background: rgba(250, 250, 250, 250);
+    outline: none;
+    caret-color: rgb(255, 4, 4);
+    color: rgb(14, 14, 14);
+    transition: 0.25s;
+}
+
+/* Quando o campo estiver em foco */
+.input-box input:focus {
+    border: 3px solid rgba(1, 3, 112, 0.25);
+}
+
+/* Cor do texto de placeholder */
+.input-box input::placeholder {
+    color: rgba(0, 4, 4, 0.75);
+}
+
+/* Correção do layout para o ícone do campo de entrada */
+.input-box i {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    color: rgba(255, 0, 0, 0.75);
+    font-size: 18px;
+    transition: 0.25s;
+}
+
+/* Ajustes adicionais para não deixar os campos encolherem */
+.input-box input,
+.input-box .invalid-feedback {
+    box-sizing: border-box;
 }

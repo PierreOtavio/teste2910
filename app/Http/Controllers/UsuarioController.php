@@ -95,4 +95,33 @@ namespace App\Http\Controllers;
             return view('teste.permissao', compact('user'));
             
         }
+ 
+        public function mudarStatusU(Request $request, $id) 
+        {
+            try {
+                $user = User::findOrFail($id);
+        
+                // Valida o campo 'status'
+                $request->validate([
+                    'status' => 'required|in:Ativo,Inativo',
+                ]);
+        
+                // Atualiza o status do usuário
+                $user->update([
+                    'status' => $request->status,
+                ]);
+        
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Status atualizado com sucesso',
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erro ao atualizar status: ' . $e->getMessage(),
+                ], 500); // Código de erro HTTP apropriado
+            }
+        }
+        
+
     }

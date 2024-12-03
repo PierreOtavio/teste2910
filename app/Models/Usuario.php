@@ -9,7 +9,6 @@ use Spatie\Permission\Traits\HasRoles;
 class Usuario extends Model
 {
     use HasFactory;
-    use HasRoles;
 
     protected $table = 'users';
     protected $fillable = [

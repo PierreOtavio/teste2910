@@ -25,23 +25,19 @@
                                         @if ($user->cargo == 1)
                                             Colaborador Comum
                                         @endif
-                                        @if ($user->cargo == 2)
-                                            Colaborador tercerizado
-                                        @endif
                                     </h4>
             <p><strong>Permissões:</strong></p>
-            <ul>
-                @if ($user->cargo == 0)
-                    <li> Ver, Criar, Editar e Excluir Usuários; </li>
-                    <li>Ver, Criar, Editar e Excluir Veículos;</li>
-                    <li>Aceitar e Recusar Solicitações;</li>
-                @endif
-                @if ($user->cargo != 0)
-                Ver usuários;
-                Ver veículos;
-                Solicitar um veículo.
-                @endif </li>
-            </ul>
+                <ul>
+                    @if ($user->cargo == 0)
+                        <li> Ver, Criar, Editar e Excluir Usuários; </li>
+                        <li>Ver, Criar, Editar e Excluir Veículos;</li>
+                        <li>Aceitar e Recusar Solicitações;</li>
+                    @else 
+                    <li>Ver usuários;</li>
+                    <li>Ver veículos;</li>
+                    <li>Solicitar um veículo.</li>
+                    @endif 
+                </ul>
         </div>
         <div class="card-footer">
             @if (auth()->user()->cargo == 0)
