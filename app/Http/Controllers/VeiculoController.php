@@ -106,20 +106,13 @@ class VeiculoController extends Controller
                 'observacao' => 'nullable|string',
                 'funcionamento' => 'nullable|string',
             ]);
-            
-            // Atualiza o veículo com os dados validados
+        
             $veiculo->update($validatedData);
-            // Redireciona com mensagem de sucesso
             return redirect()->route('veiculos.index')->with('success', 'Veículo editado com sucesso');
     }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Veiculo  $veiculo
-     * @return \Illuminate\Http\Response
-     */
+ 
     public function destroy($id)
     {
         $veiculo = Veiculo::findOrFail($id);
@@ -128,14 +121,6 @@ class VeiculoController extends Controller
         return redirect()->route('veiculos.index')->with('success', 'Veículo deletado com sucesso');
     }
 
-
-    /**
-     * Altera o status de funcionamento do veículo entre disponível e indisponível.
-     * 
-     * @param Request $request
-     * @param Veiculo $veiculo
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function mudarStatus(Request $request, $id) 
     {
         try {
