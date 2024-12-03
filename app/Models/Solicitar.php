@@ -18,6 +18,9 @@ class Solicitar extends Model
         'user_id',
         'placa_confirmar',
         'obs_user',
+        'motivo_recusado',
+        'id_recusado',
+        'hora_recusado',
     ];
     
     public function user()
