@@ -48,10 +48,10 @@
             transition: background-color 0.3s ease;
         }
         .status-indicator.active {
-            background-color: #198754;
+            background-color: #00d68f;
         }
         .status-indicator.inactive {
-            background-color: red;
+            background-color: crimson;
         }
     </style>
     
@@ -78,6 +78,16 @@
                                 id="status_{{ $user->id }}" 
                                 onclick="toggleStatus({{ $user->id }})"
                             ></div>
+                        @else
+                            @if ($user->status == "Ativo")
+                                <div class="bolinha1">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            @else
+                                <div class="bolinha2">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            @endif
                         @endif
                     </td>
                     <td>{{ $user->name }}</td>

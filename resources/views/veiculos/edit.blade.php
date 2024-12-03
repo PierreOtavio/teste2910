@@ -1,25 +1,25 @@
 @extends('layouts.darkMode')
 @section('content_header')
-<script>   
-    setTimeout(() => {
-        const successMessage = document.getElementById("message");
-        if (successMessage) {
-            successMessage.style.transition = "opacity 0.5s ease";
-            successMessage.style.opacity = "0";
-            setTimeout(() => successMessage.remove(), 500);
-        }
-    }, 5000);
-</script>
-@if(session('success'))
-    <div class="alert alert-success" id="message" role="alert">
-        {{ session('success') }}
-    </div>
-@endif
-@if(session('danger'))
-    <div class="alert alert-danger" id="message" role="alert">
-        {{ session('danger') }}
-    </div>
-@endif
+    <script>   
+        setTimeout(() => {
+            const successMessage = document.getElementById("message");
+            if (successMessage) {
+                successMessage.style.transition = "opacity 0.5s ease";
+                successMessage.style.opacity = "0";
+                setTimeout(() => successMessage.remove(), 500);
+            }
+        }, 5000);
+    </script>
+    @if(session('success'))
+        <div class="alert alert-success" id="message" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('danger'))
+        <div class="alert alert-danger" id="message" role="alert">
+            {{ session('danger') }}
+        </div>
+    @endif
 @endsection
 
 @section('content')
@@ -111,6 +111,18 @@
                                 @error('km_atual')
                                     <span class="invalid-feedback" role="alert"><strong>{{ $message }}</strong></span>
                                 @enderror
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="km_revisao" class="col-md-4 col-form-label text-md-end">{{ __('Intervalo de KM para a revisão') }}</label>
+                            <div class="col-md-6">
+                                <input id="km_revisao" type="number" class="form-control @error('km_revisao') is-invalid @enderror" name="km_revisao" value="{{ old('km_revisao', $veiculo->km_revisao) }}">
+                                @error('km_revisao')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror 
                             </div>
                         </div>
 

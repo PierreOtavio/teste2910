@@ -155,6 +155,14 @@
     color: crimson;
 }
 
+.bolinha1 {
+    color: #00d68f;
+}
+
+.bolinha2 {
+    color: crimson;
+}
+
 .info-container {
     display: flex;
     flex-wrap: wrap;
@@ -362,4 +370,16 @@ input.form-control:focus {
 
 .d-flex.justify-content-end {
     margin-bottom: 10px; /* Reduz o espaço entre o botão e a tabela */
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    text-align: center; /* Centraliza horizontalmente */
+    vertical-align: middle; /* Centraliza verticalmente */
+    /* padding: 8px; Adiciona espaçamento interno */
+    border: 1px solid #ddd; /* Adiciona borda */
 }
