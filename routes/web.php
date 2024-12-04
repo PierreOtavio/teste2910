@@ -56,9 +56,9 @@ Route::get('solicitar/end/{id}', [SolicitarController::class, 'end'])->name('sol
 
 Route::post('solicitar/finalizar/{id}', [SolicitarController::class, 'finalizar'])->name('solicitar.finalizar')->middleware('auth');
 
-Route::match(['get', 'post'],'/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])->name('solicitar.aceitar')->middleware('auth');
+Route::match(['get', 'post'], '/solicitar/{id}/aceitar', [SolicitarController::class, 'aceitar'])->name('solicitar.aceitar')->middleware('auth');
 
-Route::match(['get', 'post'], '/solicitar/{id}/?', [SolicitarController::class, 'motivoRecusado' ])->name('solicitar.recusado')->middleware('auth');
+Route::post('/solicitar/{id}/motivoRecusado', [SolicitarController::class, 'motivoRecusado'])->name('solicitar.motivoRecusado')->middleware('auth');
 
 Route::post('/solicitar/{id}/recusar', [SolicitarController::class, 'recusar'])->name('solicitar.recusar')->middleware('auth');
 
@@ -69,3 +69,5 @@ Route::get('/gerar-pdf/{id}', [SolicitarController::class, 'gerarPDF'])->name('g
 Route::get('/exportar-excel/{id}', [SolicitarController::class, 'exportarExcel'])->name('exportar.excel')->middleware('auth');
 
 Route::get('/exportar-todas-excel', [SolicitarController::class, 'exportarTodasExcel'])->name('exportar.todas.excel')->middleware('auth');
+
+Route::get('/solicitar/solicitacoes-recusadas', [SolicitarController::class, 'solicitacoesRecusadas'])->name('solicitar.solicitacoesRecusadas')->middleware('auth');

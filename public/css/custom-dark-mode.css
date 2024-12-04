@@ -1,4 +1,4 @@
-/* .dark-mode .content-wrapper {
+.dark-mode .content-wrapper {
     background-color: #161b2c;
 }
 [class*="sidebar-dark-"] {
@@ -397,5 +397,22 @@ table td {
 }
 
 #danger2 {
-    color: #dc3545;
+    background-color: #dc3545;
+}
+
+.label1 {
+    position: relative;
+    left: 1rem;
+    font-size: 1.55rem;
+    top: 5px;
+}
+
+#motivo_recusado {
+    position: relative;
+    left: 1rem;
+    height: 2.75rem;
+}
+
+#teste {
+    box-shadow: none !important;
 }

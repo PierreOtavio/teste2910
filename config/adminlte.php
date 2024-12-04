@@ -323,7 +323,7 @@ return [
                 [
                     'text' => 'Solicitar Veículo',
                     'url' => 'solicitar',
-                    'icon' =>'fas fa-file-alt'
+                    'icon' => 'fas fa-file-alt'
                 ],
                 [
                     'text' => 'Solicitações',
@@ -334,6 +334,11 @@ return [
                     'text' => 'Solicitações Finalizadas',
                     'url' => 'solicitar/finalizadas/{id}',
                     'icon' => 'fas fa-check',
+                ],
+                [
+                    'text' => 'Solicitações Recusadas',
+                    'url' => '/solicitar/solicitacoes-recusadas',
+                    'icon' => 'fas fa-times'
                 ],
             ]
         ]
