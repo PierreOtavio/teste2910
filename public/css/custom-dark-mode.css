@@ -1,4 +1,4 @@
-.dark-mode .content-wrapper {
+/* .dark-mode .content-wrapper {
     background-color: #161b2c;
 }
 [class*="sidebar-dark-"] {
@@ -382,4 +382,20 @@ table td {
     vertical-align: middle; /* Centraliza verticalmente */
     /* padding: 8px; Adiciona espaçamento interno */
     border: 1px solid #ddd; /* Adiciona borda */
+}
+
+.toggle-switch-background {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+#danger2 {
+    color: #dc3545;
 }

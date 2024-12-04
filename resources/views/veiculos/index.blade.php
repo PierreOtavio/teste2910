@@ -105,7 +105,7 @@
                             </td>
                             <td>
                             <a href="{{ route('veiculos.show', $veiculo->id) }}" class="btn btn-info">Ver</a>
-                            <a href="{{ route('veiculos.edit', $veiculo->id) }}" class="btn btn-info">Editar</a>
+                            <a href="{{ route('veiculos.edit', $veiculo->id) }}" class="btn btn-warning">Editar</a>
                             <form action="{{ route('veiculos.destroy', $veiculo->id) }}" method="POST" style="display: inline-block">
                                 @csrf
                                 @method('DELETE')

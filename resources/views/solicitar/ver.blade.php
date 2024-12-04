@@ -54,7 +54,7 @@
                     
                         <form action="{{ route('solicitar.recusar', $solicitar->id) }}" method="POST" style="display: inline-block;">
                             @csrf
-                            <button type="submit" class="btn btn-danger">Recusar</button>
+                            <button type="submit" class="btn btn-success" id="danger2">Recusar</button>
                         </form>
                     @else 
                         <a class="btn btn-secundary" onclick="history.back()">

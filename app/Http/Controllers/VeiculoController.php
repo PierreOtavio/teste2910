@@ -122,7 +122,7 @@ class VeiculoController extends Controller
     }
 
     public function mudarStatus(Request $request, $id) 
-    {
+    { 
         try {
             $veiculo = Veiculo::findOrFail($id);
             

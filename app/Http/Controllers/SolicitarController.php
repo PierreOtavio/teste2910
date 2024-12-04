@@ -180,9 +180,9 @@
             $solicitar->situacao = 'Aceito';
             $solicitar->save();
 
-            if ($solicitar->situacao = 'Aceito') {
-            $veiculo = Veiculo::findOrFail($id);
-            $veiculo->funcionamento = 1;
+            if ($solicitar->situacao == 'Aceito') {
+                $veiculo = Veiculo::findOrFail($id);
+                $veiculo->funcionamento = 1;
             }
 
             return redirect()->route('solicitar.show',  ['id' => $solicitar->id])->with('success', 'Solicitação aceita.');
