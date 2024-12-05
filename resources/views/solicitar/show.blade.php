@@ -44,7 +44,7 @@
     </thead>
     <tbody>
         @foreach ($solicitars as $solicitar)
-        @if ($solicitar->situacao == 'Pendente')
+        @if ($solicitar->situacao != 'Finalizada' && $solicitar->situacao != 'Recusada')
         <tr>
             <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
             <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
@@ -100,7 +100,7 @@
     </thead>
     <tbody>
         @foreach ($solicitars as $solicitar)
-        @if ($solicitar->situacao == 'Pendente' && $solicitar->situacao == 'Aceito')
+        @if ($solicitar->situacao != 'Finalizada' && $solicitar->situacao != 'Recusada')
         <tr>
             <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
             <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>

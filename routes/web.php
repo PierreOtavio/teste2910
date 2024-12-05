@@ -71,3 +71,5 @@ Route::get('/exportar-excel/{id}', [SolicitarController::class, 'exportarExcel']
 Route::get('/exportar-todas-excel', [SolicitarController::class, 'exportarTodasExcel'])->name('exportar.todas.excel')->middleware('auth');
 
 Route::get('/solicitar/recusadas/{id}', [SolicitarController::class, 'solicitacoesRecusadas'])->name('solicitar.solicitacoesRecusadas')->middleware('auth');
+
+Route::get('solicitar/ver-recusadas/{id}', [SolicitarController::class, 'verRecusada'])->name('solicitar.verrecusada')->middleware('auth');

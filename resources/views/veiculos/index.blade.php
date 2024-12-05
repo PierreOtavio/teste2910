@@ -55,42 +55,63 @@
                 <td>{{ $veiculo->placa}}</td>
                 
 
-<script>
-    function toggleFuncionamento(veiculoId, isChecked) {
-        fetch(`/veiculos/${veiculoId}/mudarStatus`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({
-                funcionamento: isChecked ? 0 : 1 
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const toast = document.createElement('div');
-                toast.className = 'alert alert-success position-fixed top-0 end-0 m-3';
-                toast.innerHTML = 'Status atualizado com sucesso!';
-                document.body.appendChild(toast);
-                setTimeout(() => toast.remove(), 3000);
-            } else {
-                throw new Error(data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-            document.getElementById(`funcionamento_${veiculoId}`).checked = !isChecked;
-            
-            const toast = document.createElement('div');
-            toast.className = 'alert alert-danger position-fixed top-0 end-0 m-3';
-            toast.innerHTML = 'Erro ao atualizar status!';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        });
-    }
-</script>
+                <script>
+                    function toggleFuncionamento(veiculoId, isChecked) {
+                        fetch(`/veiculos/${veiculoId}/mudarStatus`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                funcionamento: isChecked ? 0 : 1 
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                const alertDiv = document.createElement('div');
+                            alertDiv.className = 'alert alert-success position-fixed';
+                            alertDiv.id = 'message';
+                            alertDiv.style.top = '150px';
+                            alertDiv.style.right = '560px';
+                            alertDiv.style.zIndex = '1050';
+                            alertDiv.innerHTML = data.message;
+                
+                            document.body.appendChild(alertDiv);
+                
+                            // Remove o alerta após 3 segundos
+                            setTimeout(() => {
+                                if (alertDiv) {
+                                    alertDiv.remove();
+                                }
+                            }, 3000);
+                        } else {
+                            throw new Error(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                
+                        // Cria o alerta de erro
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert alert-danger position-fixed';
+                        alertDiv.style.top = '150px';
+                        alertDiv.style.right = '560px';
+                        alertDiv.style.zIndex = '1050';
+                        alertDiv.innerHTML = 'Erro ao atualizar status!';
+                        
+                        document.body.appendChild(alertDiv);
+                
+                        // Remove o alerta após 3 segundos
+                        setTimeout(() => {
+                            if (alertDiv) {
+                                alertDiv.remove();
+                            }
+                        }, 3000);
+                    });
+                }
+                </script>
                 <td>
                 @if (auth()->user()->cargo == 0) 
                             <label class="toggle-switch">

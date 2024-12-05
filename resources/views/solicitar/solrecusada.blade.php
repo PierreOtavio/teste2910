@@ -18,11 +18,6 @@
 @if ($solicitars->isNotEmpty())
 @if(auth()->user()->cargo == 0)
     <h1>Solicitações Recusadas:</h1>
-    <div class="d-flex justify-content-end mb-3">
-    <a href="{{ route('exportar.todas.excel') }}" class="btn btn-success">
-        <i class="fa fa-file-excel-o"></i> Exportar Todas em Excel
-    </a>
-    </div>
 @else 
     <h1>Minhas Solicitações Recusadas:</h1>
 @endif
@@ -52,7 +47,7 @@
                         <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
                         <td>{{ $solicitar->motivo_recusado }}</td>
                         <td>
-                            {{ $solicitar->situacao }}
+                            <a href="{{ route('solicitar.verrecusada', $solicitar->id) }}" class="btn btn-info">Ver</a>
                         </td>
                     </tr>
                     @endif

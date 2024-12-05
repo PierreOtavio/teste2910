@@ -27,6 +27,12 @@ class CreateSolicitarsTable extends Migration
             $table->unsignedBigInteger('id_recusado')->nullable();
             $table->foreign('id_recusado')->references('id')->on('users');
             $table->time('hora_recusado')->default('00:00:00');
+            $table->date('data_recusado')->nullable();
+
+            $table->unsignedBigInteger('id_aceito')->nullable();
+            $table->foreign('id_aceito')->references('id')->on('users');
+            $table->time('hora_aceito')->default('00:00:00');
+            $table->date('data_aceito')->nullable();
 
             $table->unsignedBigInteger('veiculo_id');
             $table->foreign('veiculo_id')->references('id')->on('veiculos');

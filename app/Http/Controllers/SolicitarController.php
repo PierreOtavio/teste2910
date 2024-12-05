@@ -116,6 +116,19 @@ class SolicitarController extends Controller
         return view('solicitar.ver', compact('veiculo', 'solicitar'));
     }
 
+    public function verRecusada(Solicitar $solicitar, Veiculo $veiculo, $id)
+    {
+        $solicitar = Solicitar::with(['user', 'responsavel'])->findOrFail($id);
+
+        if (!$solicitar) {
+            return redirect()->route('solicitar.index')->with('error', 'Solicitação não encontrada');
+        }
+
+        $veiculo = $solicitar->veiculo;
+        return view('solicitar.verrecusada', compact('veiculo', 'solicitar'));
+    }
+
+
 
     public function start($id)
     {
@@ -211,16 +224,16 @@ class SolicitarController extends Controller
         return redirect()->route('solicitar.show', ['id' => $solicitar->veiculo->id])->with('success', 'Solicitação finalizada com sucesso!');
     }
 
-    public function aceitar($id)
+    public function aceitar($id, Request $request)
     {
         $solicitar = Solicitar::findOrFail($id);
         $solicitar->situacao = 'Aceito';
         $solicitar->save();
 
-        if ($solicitar->situacao == 'Aceito') {
-            $veiculo = Veiculo::findOrFail($id);
-            $veiculo->funcionamento = 1;
-        }
+        $solicitar->hora_aceito = Carbon::now();
+        $solicitar->id_aceito = Auth::id();
+        $solicitar->data_aceito = Carbon::now()->format('Y-m-d');
+        $solicitar->save();
 
         return redirect()->route('solicitar.show',  ['id' => $solicitar->id])->with('success', 'Solicitação aceita.');
     }
@@ -246,6 +259,7 @@ class SolicitarController extends Controller
 
         $solicitar->motivo_recusado = $request->motivo_recusado;
         $solicitar->hora_recusado = Carbon::now();
+        $solicitar->data_recusado = Carbon::now()->format('Y-m-d');
         $solicitar->id_recusado = Auth::id();
         $solicitar->save();
 

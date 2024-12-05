@@ -116,35 +116,68 @@
         </tbody>
     </table>
     <script>
-    function toggleStatus(userId) {
-        const indicator = document.getElementById(`status_${userId}`);
-        const isActive = indicator.classList.contains('active');
+   function toggleStatus(userId) {
+    const indicator = document.getElementById(`status_${userId}`);
+    const isActive = indicator.classList.contains('active');
+    
+    fetch(`/teste/${userId}/mudarStatusU`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            status: isActive ? 'Inativo' : 'Ativo'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Alterna a cor com base no novo status
+            indicator.classList.toggle('active', !isActive);
+            indicator.classList.toggle('inactive', isActive);
+
+            // Cria o alerta de sucesso
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success position-fixed';
+            alertDiv.id = 'message';
+            alertDiv.style.top = '150px';
+            alertDiv.style.right = '560px';
+            alertDiv.style.zIndex = '1050';
+            alertDiv.innerHTML = data.message;
+
+            document.body.appendChild(alertDiv);
+
+            // Remove o alerta após 3 segundos
+            setTimeout(() => {
+                if (alertDiv) {
+                    alertDiv.remove();
+                }
+            }, 3000);
+        } else {
+            throw new Error(data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+
+        // Cria o alerta de erro
+        const alertDiv = document.createElement('div');
+        alertDiv.className = 'alert alert-danger position-fixed';
+        alertDiv.style.top = '150px';
+        alertDiv.style.right = '560px';
+        alertDiv.style.zIndex = '1050';
+        alertDiv.innerHTML = 'Erro ao atualizar status!';
         
-        fetch(`/teste/${userId}/mudarStatusU`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({
-                status: isActive ? 'Inativo' : 'Ativo'
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Alterna a cor com base no novo status
-                indicator.classList.toggle('active', !isActive);
-                indicator.classList.toggle('inactive', isActive);
-                alert(`Status atualizado para: ${data.status}`);
-            } else {
-                throw new Error(data.message);
+        document.body.appendChild(alertDiv);
+
+        // Remove o alerta após 3 segundos
+        setTimeout(() => {
+            if (alertDiv) {
+                alertDiv.remove();
             }
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-            alert('Erro ao atualizar status!');
-        });
-    }
+        }, 3000);
+    });
+}
 </script>    
 @endsection

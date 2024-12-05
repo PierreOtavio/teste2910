@@ -21,7 +21,11 @@ class Solicitar extends Model
         'motivo_recusado',
         'id_recusado',
         'hora_recusado',
+        'id_aceito',
+        'hora_aceito',
+        'data_aceito',
     ];
+
     
     public function user()
     {
@@ -31,6 +35,16 @@ class Solicitar extends Model
     public function veiculo()
     {
         return $this->belongsTo(Veiculo::class);
+    }
+
+    public function responsavel()
+    {
+        return $this->belongsTo(User::class, 'id_recusado');
+    }
+
+    public function responsavel2()
+    {
+        return $this->belongsTo(User::class, 'id_aceito');
     }
 
 }
