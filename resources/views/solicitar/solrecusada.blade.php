@@ -16,3 +16,37 @@
 </script>
 <h1>Solicitações Recusadas:</h1>
 @endsection
+
+@section('content')
+
+
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Veículo:</th>
+            <th>Retirada:</th>
+            <th>Motivo:</th>
+            <th>Ação:</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if($solicitar->situacao == 'Recusada')
+        @foreach ($solicitars as $solicitar)
+        <tr>
+            <td>{{ $solicitar->veiculo->marca }} {{ $solicitar->veiculo->modelo }} - {{ $solicitar->veiculo->placa }}</td>
+            <td>Data: {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y') }} <br> Hora: {{ $solicitar->hora_inicial }}</td>
+            <td>{{ $solicitar->motivo }}</td>
+            <td>
+                <a href="{{ route('solicitar.ver', $solicitar->id) }}" class="btn btn-info">Ver</a>
+            </td>
+        </tr>
+        @empty
+        <tr>
+            <td colspan="4" class="text-center">Nenhuma solicitação recusada encontrada.</td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+
+@endsection

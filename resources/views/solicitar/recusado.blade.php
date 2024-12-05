@@ -16,20 +16,20 @@
         }
     }, 5000);
 </script>
-@endsection
-
-@section('content')
 @if(session('success'))
 <div class="alert alert-success" id="message" role="alert">
     {{ session('success') }}
 </div>
 @endif
+@endsection
+
+@section('content')
 <div class="content">
     <div class="card">
         <div class="card-body">
             <div class="col-md-6">
                 <h3>Solicitação do {{ $solicitar->veiculo->marca}} {{ $solicitar->veiculo->modelo}} - Recusada</h3>
-                <form action="{{ route('solicitar.motivoRecusado', $solicitar->id) }}" method="POST">
+                <form action="{{ route('solicitar.motivoRecusado', ['id' => $solicitar->id]) }}" method="POST">
                     @csrf
                     <label for="motivo_recusado" class="label1">Porque foi recusado?</label>
                     <input type="text" class="form-control @error('motivo_recusado') is-invalid @enderror" id="motivo_recusado" name="motivo_recusado" required>
@@ -38,13 +38,14 @@
                         <strong>{{ $message }}</strong>
                     </span>
                     @enderror
-                    <div class="card-footer" id="teste">
-                        <button type="submit" class="btn btn-success">Enviar</button>
-                    </div>
-                </form>
 
             </div>
         </div>
+
+        <div class="card-footer" id="teste">
+            <button type="submit" class="btn btn-success">Enviar</button>
+        </div>
+        </form>
     </div>
 </div>
 

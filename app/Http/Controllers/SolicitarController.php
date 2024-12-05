@@ -66,7 +66,7 @@ class SolicitarController extends Controller
         $solicitar->user_id = Auth::id();
         $solicitar->save();
 
-        return redirect()->route('solicitar.index');
+        return redirect()->route('solicitar.show', ['id' => $solicitar->id])->with('success', 'Sua solicitação foi enviada com sucesso!');
     }
 
 
@@ -86,14 +86,9 @@ class SolicitarController extends Controller
 
     public function solicitacoesRecusadas($id)
     {
-        $solicitars = Solicitar::findOrFail($id);
+        $solicitar = Solicitar::findOrFail($id);
 
-
-        if ($solicitars->situacao != 'Recusada') {
-            return redirect()->route('solicitar.show')->with('error', 'Não há solicitações recusadas');
-        }
-
-        return view('solicitar.solrecusada', compact('solicitars'))->with('users');
+        return view('solicitar.solrecusada', compact('solicitar'));
     }
 
     public function start($id)

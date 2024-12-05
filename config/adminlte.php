@@ -337,8 +337,8 @@ return [
                 ],
                 [
                     'text' => 'Solicitações Recusadas',
-                    'url' => '/solicitar/solicitacoes-recusadas',
-                    'icon' => 'fas fa-times'
+                    'url' => 'solicitar/solicitacoes-recusadas',
+                    'icon' => 'fas fa-times',
                 ],
             ]
         ]
