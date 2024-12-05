@@ -20,24 +20,56 @@ use Svg\Tag\Rect;
 
 class SolicitarController extends Controller
 {
-
+    
     public function index()
     {
         $user = Auth::user();
-
+        
         if ($user->cargo == 0) {
             $solicitars = Solicitar::whereNull('hora_final')->with('veiculo')->get();
         } else {
             $solicitars = Solicitar::where('user_id', $user->id)
-                ->whereNull('hora_final')
+            ->whereNull('hora_final')
+            ->with('veiculo')
+            ->get();
+        }
+        
+        return view('solicitar.show', compact('solicitars'));
+    }
+    
+    public function solicitacoesRecusadas()
+    {
+        $user = Auth::user();
+        $solicitars = Solicitar::where('situacao', 'Recusada')->get();
+
+        if (auth()->user()->cargo == 0) {
+            $solicitars = Solicitar::where('situacao', 'Recusada')->with('veiculo')->get();
+        } else {
+            $solicitars = Solicitar::where('user_id', $user->id)
+                ->where('situacao', 'Recusada')
                 ->with('veiculo')
                 ->get();
         }
 
-        return view('solicitar.show', compact('solicitars'));
+        return view('solicitar.solrecusada', compact('solicitars'));
     }
+    
+    public function finalizadas()
+    {
+        $user = Auth::user();
+        $solicitars = Solicitar::where('situacao', 'Finalizada')->get();
 
+        if (auth()->user()->cargo == 0) {
+            $solicitars = Solicitar::where('situacao', 'Finalizada')->with('veiculo')->get();
+        } else {
+            $solicitars = Solicitar::where('user_id', $user->id)
+                ->where('situacao', 'Finalizada')
+                ->with('veiculo')
+                ->get();
+        }
 
+        return view('solicitar.finalizadas', compact('solicitars'));
+    }
 
     public function create($veiculo_id)
     {
@@ -84,12 +116,6 @@ class SolicitarController extends Controller
         return view('solicitar.ver', compact('veiculo', 'solicitar'));
     }
 
-    public function solicitacoesRecusadas($id)
-    {
-        $solicitar = Solicitar::findOrFail($id);
-
-        return view('solicitar.solrecusada', compact('solicitar'));
-    }
 
     public function start($id)
     {
@@ -215,7 +241,7 @@ class SolicitarController extends Controller
         $solicitar = Solicitar::findOrFail($id);
 
         $request->validate([
-            'motivo_recusado' => 'required|string|max: 255',
+            'motivo_recusado' => 'required|string|max:255',
         ]);
 
         $solicitar->motivo_recusado = $request->motivo_recusado;
@@ -226,22 +252,6 @@ class SolicitarController extends Controller
         return redirect()->route('solicitar.show', ['id' => $solicitar->id])->with('success', 'Sua recusa foi justificada!');
     }
 
-    public function finalizadas()
-    {
-        $user = Auth::user();
-        $solicitars = Solicitar::where('situacao', 'Finalizada')->get();
-
-        if (auth()->user()->cargo == 0) {
-            $solicitars = Solicitar::where('situacao', 'Finalizada')->with('veiculo')->get();
-        } else {
-            $solicitars = Solicitar::where('user_id', $user->id)
-                ->where('situacao', 'Finalizada')
-                ->with('veiculo')
-                ->get();
-        }
-
-        return view('solicitar.finalizadas', compact('solicitars'));
-    }
 
     public function gerarPDF($id)
     {

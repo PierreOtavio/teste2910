@@ -15,13 +15,14 @@
     }, 5000);
 </script> 
 
+@if ($solicitars->isNotEmpty())
 @if(auth()->user()->cargo == 0)
     <h1>Solicitações Finalizadas:</h1>
     <div class="d-flex justify-content-end mb-3">
     <a href="{{ route('exportar.todas.excel') }}" class="btn btn-success">
         <i class="fa fa-file-excel-o"></i> Exportar Todas em Excel
     </a>
-</div>
+    </div>
 @else 
     <h1>Minhas Solicitações Finalizadas:</h1>
 @endif
@@ -34,7 +35,6 @@
     </div>
 @endif
 
-@if ($solicitars->isNotEmpty())
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
