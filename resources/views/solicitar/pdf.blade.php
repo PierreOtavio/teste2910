@@ -13,14 +13,15 @@
     <div class="header">
         <h1>Relatório de uso do Veículo</h1>
     </div>
-    <div class="details">
+    {{-- pdf.blade: --}}
+<div class="details">
+        <h2>O.S: {{ $solicitar->id }}</h2>
         <p><strong>Colaborador:</strong> {{ $solicitar->user->name }}</p>
         <p><strong>ID do colaborador:</strong> {{ $user->id }}</p>
-        <p><strong>ID do Responsável que aceitou a solicitação:</strong> {{ $solicitar->responsavel2->name ?? 'Não informado' }}</p>
-        <p><strong>Hora que foi aceito:</strong> {{ $solicitar->hora_aceito }}</p>
+        <p><strong>Email do Colaborador:</strong> {{ $user->email }}</p>
+        <p><strong>Responsável que aceitou a solicitação:</strong> {{ $solicitar->responsavel2->name ?? 'Não informado' }}</p>
+        <p><strong>Horário que foi aceito:</strong> {{ $solicitar->hora_aceito }}</p>
         <p><strong>Data em que foi aceito:</strong> {{ \Carbon\Carbon::parse($solicitar->data_aceito)->format('d/m/y') }}</p>
-        <p><strong>Email:</strong> {{ $user->email }}</p>
-        <h2>Solicitação ID: {{ $solicitar->id }}</h2>
         <p><strong>Veículo utilizado:</strong> {{ $veiculo->marca }} {{ $veiculo->modelo }}</p>
         <p><strong>Placa:</strong> {{ $veiculo->placa }}</p>
         <p><strong>Data Inicial:</strong> {{ \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/y') }}</p>

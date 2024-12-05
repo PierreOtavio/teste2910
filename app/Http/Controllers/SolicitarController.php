@@ -308,25 +308,28 @@ class SolicitarController extends Controller
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-
-
-        $sheet->getStyle('B2:L2')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THICK);
+    
+        $sheet->getStyle('B2:P2')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THICK);
 
         // Cabeçalho
-        $sheet->setCellValue('B2', 'Colaborador');
-        $sheet->setCellValue('C2', 'Email');
-        $sheet->setCellValue('D2', 'ID da Solicitação');
-        $sheet->setCellValue('E2', 'Veículo');
-        $sheet->setCellValue('F2', 'Placa');
-        $sheet->setCellValue('G2', 'Data Inicial');
-        $sheet->setCellValue('H2', 'Data Final');
-        $sheet->setCellValue('I2', 'Hora Inicial');
-        $sheet->setCellValue('J2', 'Hora Final');
-        $sheet->setCellValue('K2', 'Motivo');
-        $sheet->setCellValue('L2', 'Situação');
+        $sheet->setCellValue('B2', 'O.S');
+        $sheet->setCellValue('C2', 'Colaborador');
+        $sheet->setCellValue('D2', 'ID do Colaborador');
+        $sheet->setCellValue('E2', 'Email do colaborador');
+        $sheet->setCellValue('F2', 'Responsável que aceitou a solicitação');
+        $sheet->setCellValue('G2', 'Horário em que a solicitação foi aceita');
+        $sheet->setCellValue('H2', 'Data em que a solicitação foi aceita');
+        $sheet->setCellValue('I2', 'Veículo');
+        $sheet->setCellValue('J2', 'Placa');
+        $sheet->setCellValue('K2', 'Data Inicial');
+        $sheet->setCellValue('L2', 'Data Final');
+        $sheet->setCellValue('M2', 'Hora Inicial');
+        $sheet->setCellValue('N2', 'Hora Final');
+        $sheet->setCellValue('O2', 'Motivo');
+        $sheet->setCellValue('P2', 'Kms Percorridos');
 
         // Estilizar o cabeçalho
-        $sheet->getStyle('B2:L2')->applyFromArray([
+        $sheet->getStyle('B2:P2')->applyFromArray([
             'font' => [
                 'bold' => true,
                 'size' => 12,
@@ -341,31 +344,47 @@ class SolicitarController extends Controller
             ],
         ]);
 
-        // Dados
+        $solicitars = Solicitar::with(['veiculo', 'user'])->where('situacao', 'Finalizada')->get();
+        $row = 3;
+        foreach ($solicitars as $solicitar) {
+            // Cálculo do km percorrido para cada solicitação
 
         $solicitars = Solicitar::with(['veiculo', 'user'])->where('situacao', 'Finalizada')->get();
         $row = 3;
         foreach ($solicitars as $solicitar) {
-            $sheet->setCellValue('B' . $row, $solicitar->user->name);
-            $sheet->setCellValue('C' . $row, $solicitar->user->email);
-            $sheet->setCellValue('D' . $row, $solicitar->id);
-            $sheet->setCellValue('E' . $row, $solicitar->veiculo->marca . ' ' . $solicitar->veiculo->modelo);
-            $sheet->setCellValue('F' . $row, $solicitar->veiculo->placa);
-            $sheet->setCellValue('G' . $row, \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y'));
-            $sheet->setCellValue('H' . $row, \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y'));
-            $sheet->setCellValue('I' . $row, $solicitar->hora_inicial);
-            $sheet->setCellValue('J' . $row, $solicitar->hora_final);
-            $sheet->setCellValue('K' . $row, $solicitar->motivo);
-            $sheet->setCellValue('L' . $row, $solicitar->situacao);
+            $sheet->setCellValue('B' . $row, $solicitar->id);
+            $sheet->setCellValue('C' . $row, $solicitar->user->name);
+            $sheet->setCellValue('D' . $row, $solicitar->user->id);
+            $sheet->setCellValue('E' . $row, $solicitar->user->email);
+            $sheet->setCellValue('F' . $row, $solicitar->responsavel2->name);
+            $sheet->setCellValue('G' . $row, $solicitar->hora_aceito);
+            $sheet->setCellValue('H' . $row, \Carbon\Carbon::parse($solicitar->data_aceito)->format('d/m/y'));
+            $sheet->setCellValue('I' . $row, $solicitar->veiculo->marca . ' ' . $solicitar->veiculo->modelo);
+            $sheet->setCellValue('J' . $row, $solicitar->veiculo->placa);
+            $sheet->setCellValue('K' . $row, \Carbon\Carbon::parse($solicitar->data_inicial)->format('d/m/Y'));
+            $sheet->setCellValue('L' . $row, \Carbon\Carbon::parse($solicitar->data_final)->format('d/m/Y'));
+            $sheet->setCellValue('M' . $row, $solicitar->hora_inicial);
+            $sheet->setCellValue('N' . $row, $solicitar->hora_final);
+            $sheet->setCellValue('O' . $row, $solicitar->motivo);
+            $sheet->setCellValue('P' . $row, $solicitar->veiculo->velocimetro_final - $solicitar->veiculo->velocimetro_inicio);
             $row++;
         }
 
         // Ajustar largura das colunas
-        foreach (range('B', 'L') as $col) {
+        foreach (range('B', 'P') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
+            $lastRow = $row - 1; // Última linha de dados
+    $sheet->getStyle("B3:P{$lastRow}")->applyFromArray([
+        'alignment' => [
+            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+        ],
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => Border::BORDER_THIN,
+            ],
+        ],
+    ]);
         }
-        $lastRow = $row - 1; // O valor de $row após o loop aponta para a próxima linha, então subtraímos 1
-        $sheet->getStyle("B3:L{$lastRow}")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
 
         // Baixar o arquivo
         $writer = new Xlsx($spreadsheet);
@@ -376,3 +395,5 @@ class SolicitarController extends Controller
         $writer->save('php://output');
     }
 }
+}
+

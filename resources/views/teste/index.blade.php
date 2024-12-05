@@ -102,11 +102,6 @@
                         @if (auth()->user()->cargo == 0)
                             <a href="{{ route('teste.show', $user->id) }}" class="btn btn-info">Ver</a>
                             <a href="{{ route('teste.edit', $user->id) }}" class="btn btn-warning">Editar</a>
-                            <form action="{{ route('teste.destroy', $user->id) }}" method="POST" style="display: inline-block">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Certeza que deseja excluir?')">Excluir</button>
-                            </form>
                         @else
                             <a href="{{ route('teste.show', $user->id) }}" class="btn btn-info">Ver</a>
                         @endif
